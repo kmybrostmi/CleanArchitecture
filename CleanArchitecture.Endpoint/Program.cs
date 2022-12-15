@@ -1,3 +1,4 @@
+using CleanArchitecture.Application;
 using CleanArchitecture.Endpoint;
 using CleanArchitecture.Infrastructure;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Configuration
 builder.Services.AddInfrastructureServices(builder.Configuration);   //Infrastructure Layer     
+builder.Services.AddApplicationServices(builder.Configuration);      //Application Layer
 builder.AddWebConfigureService();                                    //Web Layer
 
 

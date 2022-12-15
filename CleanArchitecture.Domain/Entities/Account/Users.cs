@@ -4,15 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace CleanArchitecture.Domain.Entities.Account;
 public class Users : BaseEntity
 {
-    public Users(string firstName, string lastName, string nationalCode, string avatar, string password, string phoneNumber)
-    {
-        FirstName = firstName;
-        LastName = lastName;
-        NationalCode = nationalCode;
-        Avatar = avatar;
-        Password = password;
-        PhoneNumber = phoneNumber;
-    }
 
     [Display(Name ="نام")]
     [Required(ErrorMessage ="لطفا {0} را وارد کنید")]

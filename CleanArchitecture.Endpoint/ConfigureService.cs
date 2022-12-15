@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Infrastructure.EfContext;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,19 @@ public static class ConfigureService
     {
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+        }).AddCookie(options =>
+        {
+            options.LoginPath = "/login";
+            options.LogoutPath = "/log-out";
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(43200);
+        });
 
         return builder.Services;
     }

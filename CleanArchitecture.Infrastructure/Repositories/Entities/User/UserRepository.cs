@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Infrastructure.EfContext;
 using CleanArchitecture.Infrastructure.Repositories.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Repositories.Entities.User;
 
@@ -13,6 +14,16 @@ public class UserRepository : BaseRepository<Users> , IUserRepository
     public Task<bool> DeleteUser(Guid userId)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<Users> GetUserByPhoneNumber(string phoneNumber)
+    {
+        return await Context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+    }
+
+    public async Task<bool> IsExistsPhoneNumber(string phoneNumber)
+    {
+        return await Context.Users.AsQueryable().AnyAsync(x => x.PhoneNumber == phoneNumber);
     }
 }
 
