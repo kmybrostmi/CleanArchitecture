@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CleanArchitecture.Infrastructure.EfContext;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Endpoint;
 public static class ConfigureService
@@ -19,12 +21,12 @@ public static class ConfigureService
 
         //Get Service
         var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-        //var context = services.GetRequiredService<StoreDbContext>();
+        var context = services.GetRequiredService<AppDbContext>();
 
         //Auto Migration And Generate SeedData
         try
         {
-            //await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync();
             //await GenerateFakeData.SeedDataAsync(context, loggerFactory);
         }
         catch (Exception ex)
@@ -37,7 +39,6 @@ public static class ConfigureService
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 

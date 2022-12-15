@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Endpoint", "CleanArchitecture.Endpoint\CleanArchitecture.Endpoint.csproj", "{C04693D3-5AB8-45AD-BC96-964FB5115553}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.IOC", "Infrastructure.IOC", "{237AB1BF-879E-4EEE-AFFF-CCFFFD8BEF9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Infrastructure.IOC", "CleanArchitecture.Infrastructure.IOC\CleanArchitecture.Infrastructure.IOC.csproj", "{3CED773F-2009-4AF6-A832-C7EABC48A1E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,10 @@ Global
 		{C04693D3-5AB8-45AD-BC96-964FB5115553}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C04693D3-5AB8-45AD-BC96-964FB5115553}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C04693D3-5AB8-45AD-BC96-964FB5115553}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CED773F-2009-4AF6-A832-C7EABC48A1E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CED773F-2009-4AF6-A832-C7EABC48A1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CED773F-2009-4AF6-A832-C7EABC48A1E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CED773F-2009-4AF6-A832-C7EABC48A1E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +66,8 @@ Global
 		{4C4A663D-BE37-47C1-A200-A753EF628145} = {C1826325-1813-499E-BD6A-BF4381C9E0DD}
 		{07DD804E-BB16-4A4B-A8C2-19A82611403D} = {B89D649E-A088-4945-99B2-699DC460E22B}
 		{C04693D3-5AB8-45AD-BC96-964FB5115553} = {4BEFC449-D0B8-4C3D-9078-7FD1747A0E5D}
+		{237AB1BF-879E-4EEE-AFFF-CCFFFD8BEF9D} = {F43D5C91-995F-488A-A431-1137DE8DD8B0}
+		{3CED773F-2009-4AF6-A832-C7EABC48A1E7} = {237AB1BF-879E-4EEE-AFFF-CCFFFD8BEF9D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F0B8ED5-E308-4772-A325-CB3FF25A684E}
