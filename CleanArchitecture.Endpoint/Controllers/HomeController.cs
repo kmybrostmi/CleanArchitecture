@@ -8,6 +8,7 @@ namespace CleanArchitecture.Endpoint.Controllers
     {
         public IActionResult Index()
         {
+            //TempData[ErrorMessage] = "123";
             return View();
         }
 

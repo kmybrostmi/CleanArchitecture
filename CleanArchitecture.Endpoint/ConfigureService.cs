@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace CleanArchitecture.Endpoint;
 public static class ConfigureService
@@ -23,6 +25,8 @@ public static class ConfigureService
             options.LogoutPath = "/log-out";
             options.ExpireTimeSpan = TimeSpan.FromMinutes(43200);
         });
+
+        builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Arabic }));
 
         return builder.Services;
     }
