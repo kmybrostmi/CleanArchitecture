@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Helpers;
 using CleanArchitecture.Domain.Entities.Account;
-using CleanArchitecture.Domain.ViewModels.User;
+using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using MediatR;
 

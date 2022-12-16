@@ -1,5 +1,5 @@
 ﻿using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Domain.ViewModels.User;
+using CleanArchitecture.Domain.ViewModels.Account;
 
 namespace CleanArchitecture.Application.Entities.UserCommands.Create;
 

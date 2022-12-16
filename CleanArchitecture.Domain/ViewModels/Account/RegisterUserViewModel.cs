@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CleanArchitecture.Domain.ViewModels.User;
+namespace CleanArchitecture.Domain.ViewModels.Account;
 public class RegisterUserViewModel
 {
     [Display(Name = "نام")]
@@ -34,5 +34,11 @@ public class RegisterUserViewModel
     [MaxLength(50, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
     [Compare("Password",ErrorMessage ="کلمه عبور وارد شده مغایرت دارد")]
     public string ConfirmPassword { get; set; }
+}
+
+public enum RegisterUserResult
+{
+    Success,
+    MobileExists
 }
 

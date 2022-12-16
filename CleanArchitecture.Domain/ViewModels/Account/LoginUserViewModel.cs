@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CleanArchitecture.Domain.ViewModels.User;
+namespace CleanArchitecture.Domain.ViewModels.Account;
 public class LoginUserViewModel
 {
     [Display(Name = "شماره تلفن")]

@@ -34,7 +34,16 @@
                                     </div><!-- End .header-menu -->
                                 </div><!-- End .header-dropdown -->
                             </li>
-                            <li><a href="#signin-modal" data-toggle="modal">ورود / ثبت نام</a></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a asp-action="Login" asp-controller="Account">@User.Identity.Name</a></li>
+                                <li><a asp-action="Logout" asp-controller="Account">خروج</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-action="Login" asp-controller="Account">ورود</a></li>
+                                <li><a asp-action="Register" asp-controller="Account">ثبت نام</a></li>
+                            }
                         </ul>
                     </li>
                 </ul><!-- End .top-menu -->
