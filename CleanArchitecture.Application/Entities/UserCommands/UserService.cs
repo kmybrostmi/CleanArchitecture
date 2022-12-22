@@ -1,9 +1,12 @@
 ﻿using Azure.Core;
+using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Helpers.Interfaces;
+using CleanArchitecture.Application.Utilities;
 using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace CleanArchitecture.Application.Entities.UserCommands;
 
@@ -36,6 +39,45 @@ public class UserService : IUserService
         }
 
         return ActiveAccountResult.Error;
+    }
+
+    public async Task<EditUserProfileResult> EditUserProfile(Guid userId, IFormFile userAvatar, EditUserProfileViewModel editUser)
+    {
+        var user = await _repository.GetUserById(userId);
+        if (user == null)
+            return EditUserProfileResult.NotFound;
+
+        user.FirstName = editUser.FirstName;
+        user.LastName = editUser.LastName;
+        user.Gender = editUser.UserGender;
+        
+        if(user.Avatar != null && userAvatar.IsImage())
+        {
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(userAvatar.FileName);
+            userAvatar.AddImageToServer(imageName, PathExtensions.UserAvatarOrginServer, 150, 150, PathExtensions.UserAvatarThumbServer);
+
+            user.Avatar = imageName;
+        }
+
+        _repository.UpdateUser(user);
+        await _repository.Save();
+
+        return EditUserProfileResult.Success;
+    }
+
+    public async Task<EditUserProfileViewModel> EditUserProfileData(Guid userId)
+    {
+        var user = await _repository.GetUserById(userId);
+        if (user == null)
+            throw new Exception();
+
+        return new EditUserProfileViewModel()
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            PhoneNumber = user.PhoneNumber,
+            UserGender = user.Gender,
+        };
     }
 
     public async Task<Users> GetUserById(Guid id)
