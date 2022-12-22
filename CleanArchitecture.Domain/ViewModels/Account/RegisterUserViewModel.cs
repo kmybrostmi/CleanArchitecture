@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CleanArchitecture.Domain.ViewModels.Site;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace CleanArchitecture.Domain.ViewModels.Account;
-public class RegisterUserViewModel
+public class RegisterUserViewModel:Recaptcha
 {
     [Display(Name = "نام")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

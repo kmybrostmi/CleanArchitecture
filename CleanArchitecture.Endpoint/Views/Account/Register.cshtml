@@ -6,6 +6,7 @@
 
 @section scripts{
     <partial name="_ValidationScripts" />
+    <partial name="_CaptchaScripts" />
 }
 
 <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
@@ -24,6 +25,7 @@
             <div class="form-tab">
                 <div class="tab-content">
                     <form asp-controller="Account" asp-action="Register" method="post">
+                        <partial name="_CaptchaInput" />
                         <div class="form-group">
                             <label for="singin-email-2">شماره تلفن</label>
                             <input type="text" asp-for="PhoneNumber" class="form-control">
@@ -38,6 +40,11 @@
                             <label for="singin-email-2">نام خانوادگی</label>
                             <input type="text" asp-for="LastName" class="form-control">
                             <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="singin-email-2">کد ملی</label>
+                            <input type="text" asp-for="NationalCode" class="form-control">
+                            <span asp-validation-for="NationalCode" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label for="singin-email-2">گذرواژه</label>

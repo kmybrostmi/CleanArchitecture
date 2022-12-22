@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CleanArchitecture.Domain.ViewModels.Site;
+using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.Domain.ViewModels.Account;
-public class LoginUserViewModel
+public class LoginUserViewModel: Recaptcha
 {
     [Display(Name = "شماره تلفن")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]

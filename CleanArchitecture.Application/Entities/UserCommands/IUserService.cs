@@ -8,5 +8,6 @@ public interface IUserService
 {
     Task<Users> GetUserByPhoneNumber(string phoneNumber);
     Task<LoginUserResult> LoginUser(LoginUserViewModel loginUser);
+    Task<RegisterUserResult> RegisterUser(RegisterUserViewModel loginUser);
 }
 

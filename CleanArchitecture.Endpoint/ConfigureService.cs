@@ -1,4 +1,6 @@
 ﻿using CleanArchitecture.Infrastructure.EfContext;
+using GoogleReCaptcha.V3;
+using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,8 @@ public static class ConfigureService
         });
 
         builder.Services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Arabic }));
+
+        builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
         return builder.Services;
     }

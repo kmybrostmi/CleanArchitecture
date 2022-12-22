@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using CleanArchitecture.Domain.ViewModels.Account;
+using GoogleReCaptcha.V3.Interface;
+using Microsoft.Win32;
 
 namespace CleanArchitecture.Endpoint.Controllers
 {
@@ -14,11 +16,13 @@ namespace CleanArchitecture.Endpoint.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IUserService _userService;
+        private readonly ICaptchaValidator _captchaValidator;
 
-        public AccountController(IMediator mediator, IUserService userService)
+        public AccountController(IMediator mediator, IUserService userService, ICaptchaValidator captchaValidator)
         {
             _mediator = mediator;
             _userService = userService;
+            _captchaValidator = captchaValidator;
         }
 
         [HttpGet("register")]
@@ -28,22 +32,25 @@ namespace CleanArchitecture.Endpoint.Controllers
         }
 
         [HttpPost("register"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([FromBody] RegisterUserViewModel register)
+        public async Task<IActionResult> Register(RegisterUserViewModel register)
         {
-            if (ModelState.IsValid)
+            if(!await _captchaValidator.IsCaptchaPassedAsync(register.Token))
             {
-                var result = await _mediator.Send(new RegisterUserCommand(register));
-
-                switch (result)
-                {
-                    case RegisterUserResult.Success:
-                        TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
-                        break;
-                    case RegisterUserResult.MobileExists:
-                        TempData[ErrorMessage] = "شماره تلفن وارد شده قبلا در سیستم ثبت شده است";
-                        return Redirect("/");
-                }
+                TempData[ErrorMessage] = "کد کپچا معتبر نیست";
+                return View(register);
             }
+            var result = await _userService.RegisterUser(register);
+
+            switch (result)
+            {
+                case RegisterUserResult.Success:
+                    TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
+                    break;
+                case RegisterUserResult.MobileExists:
+                    TempData[ErrorMessage] = "شماره تلفن وارد شده قبلا در سیستم ثبت شده است";
+                    return Redirect("/");
+            }
+
             return View(register);
         }
 
@@ -56,6 +63,11 @@ namespace CleanArchitecture.Endpoint.Controllers
         [HttpPost("login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginUserViewModel login)
         {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(login.Token))
+            {
+                TempData[ErrorMessage] = "کد کپچا معتبر نیست";
+                return View(login);
+            }
             if (ModelState.IsValid)
             {
                 var result = await _userService.LoginUser(login);
