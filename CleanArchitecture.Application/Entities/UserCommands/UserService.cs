@@ -1,5 +1,5 @@
 ﻿using Azure.Core;
-using CleanArchitecture.Application.Helpers;
+using CleanArchitecture.Application.Helpers.Interfaces;
 using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
@@ -11,12 +11,33 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _repository;
     private readonly IPasswordHelper _passwordHelper;
+    private readonly ISmsService _smsService;
 
-    public UserService(IUserRepository repository, IPasswordHelper passwordHelper)
+    public UserService(IUserRepository repository, IPasswordHelper passwordHelper, ISmsService smsService)
     {
         _repository = repository;
         _passwordHelper = passwordHelper;
+        _smsService = smsService;
     }
+
+    public async Task<ActiveAccountResult> ActiveAccount(ActiveAccountViewModel loginUser)
+    {
+        var user = await _repository.GetUserByPhoneNumber(loginUser.PhoneNumber);
+        if (user == null)
+            return ActiveAccountResult.NotFound;
+
+        if(user.MobileActiveCode == loginUser.ActiveCode)
+        {
+            //user.MobileActiveCode = new Random().Next(1000, 9999).ToString();
+            user.IsMobileActive = true;
+            _repository.UpdateUser(user);
+            await _repository.Save();
+            return ActiveAccountResult.Success;
+        }
+
+        return ActiveAccountResult.Error;
+    }
+
     public async Task<Users> GetUserByPhoneNumber(string phoneNumber)
     {
         return await _repository.GetUserByPhoneNumber(phoneNumber);
@@ -65,6 +86,7 @@ public class UserService : IUserService
 
                 await _repository.AddAsync(user);
                 await _repository.Save();
+                await _smsService.SendVirificationCode(user.PhoneNumber, user.MobileActiveCode);
                 return RegisterUserResult.Success;
             }
 

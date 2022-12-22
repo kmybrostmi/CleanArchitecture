@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using CleanArchitecture.Application.Helpers.Interfaces;
 
-namespace CleanArchitecture.Application.Helpers;
-public interface IPasswordHelper
-{
-    string EncodePasswordMd5(string passWord);
-}
-
+namespace CleanArchitecture.Application.Helpers.Services;
 
 public class PasswordHelper : IPasswordHelper
 {
     public string EncodePasswordMd5(string pass) //Encrypt using MD5   
     {
-        Byte[] originalBytes;
-        Byte[] encodedBytes;
+        byte[] originalBytes;
+        byte[] encodedBytes;
         MD5 md5;
         //Instantiate MD5CryptoServiceProvider, get bytes for original password and compute hash (encoded password)   
         md5 = new MD5CryptoServiceProvider();
-        originalBytes = ASCIIEncoding.Default.GetBytes(pass);
+        originalBytes = Encoding.Default.GetBytes(pass);
         encodedBytes = md5.ComputeHash(originalBytes);
         //Convert encoded bytes back to a 'readable' string   
         return BitConverter.ToString(encodedBytes);

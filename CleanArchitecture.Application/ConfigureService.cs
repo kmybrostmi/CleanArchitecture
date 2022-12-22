@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.Entities.UserCommands;
 using CleanArchitecture.Application.Entities.UserCommands.Create;
-using CleanArchitecture.Application.Helpers;
+using CleanArchitecture.Application.Helpers.Interfaces;
+using CleanArchitecture.Application.Helpers.Services;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ public static class ConfigureService
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IPasswordHelper, PasswordHelper>();
         services.AddMediatR(typeof(RegisterUserCommand).Assembly);
-
+        services.AddScoped<ISmsService, SmsService>();
         return services;
     }
 }

@@ -27,6 +27,11 @@ public class UserRepository : BaseRepository<Users> , IUserRepository
     {
         return await Context.Users.AsQueryable().AnyAsync(x => x.PhoneNumber == phoneNumber);
     }
+
+    public void UpdateUser(Users user)
+    {
+        Context.Users.Update(user);
+    }
 }
 
 

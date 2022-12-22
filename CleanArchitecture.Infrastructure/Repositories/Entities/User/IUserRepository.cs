@@ -7,6 +7,7 @@ public interface IUserRepository : IBaseRepository<Users>
     Task<bool> DeleteUser(Guid userId);
     Task<bool> IsExistsPhoneNumber(string phoneNumber);
     Task<Users> GetUserByPhoneNumber(string phoneNumber);
+    void UpdateUser(Users user);
 }
 
 
