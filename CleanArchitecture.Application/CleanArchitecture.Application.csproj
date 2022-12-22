@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="KavenegarDotNetCore" Version="1.0.5" />
+    <PackageReference Include="LazZiya.ImageResize" Version="4.1.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
   </ItemGroup>
 
   <ItemGroup>

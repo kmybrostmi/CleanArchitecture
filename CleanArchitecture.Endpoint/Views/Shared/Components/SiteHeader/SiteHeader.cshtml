@@ -1,4 +1,12 @@
-﻿<header class="header header-intro-clearance header-4">
+﻿@using CleanArchitecture.Domain.Entities.Account
+@using CleanArchitecture.Application.Extensions
+@{
+    var user = (Users)ViewBag.User;
+}
+
+
+
+<header class="header header-intro-clearance header-4">
     <div class="header-top">
         <div class="container">
             <div class="header-left">
@@ -36,7 +44,7 @@
                             </li>
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li><a asp-action="Login" asp-controller="Account">@User.Identity.Name</a></li>
+                                <li><a asp-area="User" asp-action="Index" asp-controller="Home">@user.GetUserName()</a></li>
                                 <li><a asp-action="Logout" asp-controller="Account">خروج</a></li>
                             }
                             else

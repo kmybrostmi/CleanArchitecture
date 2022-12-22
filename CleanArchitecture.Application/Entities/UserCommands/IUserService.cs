@@ -10,5 +10,6 @@ public interface IUserService
     Task<LoginUserResult> LoginUser(LoginUserViewModel loginUser);
     Task<RegisterUserResult> RegisterUser(RegisterUserViewModel loginUser);
     Task<ActiveAccountResult> ActiveAccount(ActiveAccountViewModel loginUser);
+    Task<Users> GetUserById(Guid id);
 }
 

@@ -8,6 +8,7 @@ public interface IUserRepository : IBaseRepository<Users>
     Task<bool> IsExistsPhoneNumber(string phoneNumber);
     Task<Users> GetUserByPhoneNumber(string phoneNumber);
     void UpdateUser(Users user);
+    Task<Users> GetUserById(Guid id);
 }
 
 

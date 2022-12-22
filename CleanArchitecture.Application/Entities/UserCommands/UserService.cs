@@ -38,6 +38,12 @@ public class UserService : IUserService
         return ActiveAccountResult.Error;
     }
 
+    public async Task<Users> GetUserById(Guid id)
+    {
+        var user = await _repository.GetUserById(id);
+        return user;
+    }
+
     public async Task<Users> GetUserByPhoneNumber(string phoneNumber)
     {
         return await _repository.GetUserByPhoneNumber(phoneNumber);

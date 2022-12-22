@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Repositories.Entities.User;
 
-public class UserRepository : BaseRepository<Users> , IUserRepository
+public class UserRepository : BaseRepository<Users>, IUserRepository
 {
     public UserRepository(AppDbContext context) : base(context)
     {
@@ -18,7 +18,7 @@ public class UserRepository : BaseRepository<Users> , IUserRepository
 
     public async Task<Users> GetUserByPhoneNumber(string phoneNumber)
     {
-        var result =  await Context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber || x.NationalCode == phoneNumber ||
+        var result = await Context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber || x.NationalCode == phoneNumber ||
                                                                     x.FirstName == phoneNumber || x.LastName == phoneNumber);
         return result;
     }
@@ -32,6 +32,13 @@ public class UserRepository : BaseRepository<Users> , IUserRepository
     {
         Context.Users.Update(user);
     }
+
+    public async Task<Users> GetUserById(Guid id)
+    {
+        var user = await Context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        return user;
+    }
 }
+
 
 
