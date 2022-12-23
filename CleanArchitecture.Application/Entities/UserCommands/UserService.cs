@@ -51,7 +51,7 @@ public class UserService : IUserService
         user.LastName = editUser.LastName;
         user.Gender = editUser.UserGender;
         
-        if(user.Avatar != null && userAvatar.IsImage())
+        if(userAvatar.IsImage())
         {
             var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(userAvatar.FileName);
             userAvatar.AddImageToServer(imageName, PathExtensions.UserAvatarOrginServer, 150, 150, PathExtensions.UserAvatarThumbServer);
@@ -77,6 +77,7 @@ public class UserService : IUserService
             LastName = user.LastName,
             PhoneNumber = user.PhoneNumber,
             UserGender = user.Gender,
+            Avatar = user.Avatar,
         };
     }
 

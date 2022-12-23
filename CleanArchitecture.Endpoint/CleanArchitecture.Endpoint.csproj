@@ -19,4 +19,9 @@
     <ProjectReference Include="..\CleanArchitecture.Application\CleanArchitecture.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\userAvatar\orgin\" />
+    <Folder Include="wwwroot\img\userAvatar\thumb\" />
+  </ItemGroup>
+
 </Project>

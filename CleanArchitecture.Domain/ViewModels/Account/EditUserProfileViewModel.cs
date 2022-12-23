@@ -18,6 +18,9 @@ public class EditUserProfileViewModel
     [Display(Name = "شماره تلفن همراه")]
     public string PhoneNumber { get; set; }
 
+    [Display(Name = "آواتار")]
+    public string Avatar { get; set; }
+
     [Display(Name = "جنسیت")]
     public Gender UserGender { get; set; }
 }
