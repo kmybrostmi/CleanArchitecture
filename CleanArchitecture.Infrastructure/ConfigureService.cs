@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Infrastructure.EfContext;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
+using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWallet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ public static class ConfigureService
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IUserWalletRepository, UserWalletRepository>();
 
         return services;
     }

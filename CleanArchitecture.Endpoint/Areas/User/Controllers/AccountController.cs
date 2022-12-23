@@ -1,22 +1,29 @@
 ﻿using CleanArchitecture.Application.Entities.UserCommands;
+using CleanArchitecture.Application.Entities.UserWalletCommands;
 using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Domain.ViewModels.Account;
+using CleanArchitecture.Domain.ViewModels.Wallet;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZarinpalSandbox;
 
 namespace CleanArchitecture.Endpoint.Areas.User.Controllers;
 
 public class AccountController : UserBaseController
 {
     private readonly IUserService _userService;
+    private readonly IUserWalletService _walletService;
+    private readonly IConfiguration _configuration;
 
-    public AccountController(IUserService userService)
+    public AccountController(IUserService userService, IUserWalletService walletService, IConfiguration configuration)
     {
         _userService = userService;
+        _walletService = walletService;
+        _configuration = configuration;
     }
     [HttpGet("edit-user-profile")]
     public async Task<IActionResult> EditUserProfile()
@@ -72,5 +79,58 @@ public class AccountController : UserBaseController
         }
         TempData[ErrorMessage] = "کلمه عبور وارد شده مطابقت ندارد";
         return View(changePassword);
+    }
+
+
+    [HttpGet("charge-wallet")]
+    public async Task<IActionResult> ChargeWallet()
+    {
+        return View();
+    }
+
+    [HttpPost("charge-wallet"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChargeWallet(ChargeWalletViewModel chargeWallet)
+    {
+        var walletId = await _walletService.ChargeWallet(User.GetUserId(), User.GetUserId(), chargeWallet, $"شارژ به مبلغ {chargeWallet.Amount}");
+
+        //payment
+        var payment = new Payment(chargeWallet.Amount);
+        var url = _configuration.GetSection("DefaultUrl")["Host"] + "/user/online-payment/" + walletId;
+        var result = payment.PaymentRequest("شارژ کیف پول", url);
+
+        if (result.Result.Status == 100)
+        {
+            return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Result.Authority);
+        }
+        else
+        {
+            TempData[ErrorMessage] = "مشکلی در پرداخت به وجود آماده است،لطفا مجددا امتحان کنید";
+        }
+        return View(chargeWallet);
+    }
+
+    [HttpGet("online-payment/{id}")]
+    public async Task<IActionResult> OnlinePayment(Guid id)
+    {
+        if (HttpContext.Request.Query["Status"] != "" && HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" && HttpContext.Request.Query["Authority"] != "")
+        {
+            string authority = HttpContext.Request.Query["Authority"];
+            var wallet = await _walletService.GetUserWalletById(id);
+            if (wallet != null)
+            {
+                var payment = new Payment(wallet.Amount);
+                var result = payment.Verification(authority).Result;
+
+                if (result.Status == 100)
+                {
+                    ViewBag.RefId = result.RefId;
+                    ViewBag.Success = true;
+                    await _walletService.UpdateWalletForCharge(wallet);
+                }
+                return View();
+            }
+            return NotFound();
+        }
+        return View();
     }
 }

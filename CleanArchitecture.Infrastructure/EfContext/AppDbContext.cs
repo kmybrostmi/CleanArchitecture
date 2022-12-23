@@ -1,10 +1,6 @@
 ﻿using CleanArchitecture.Domain.Entities.Account;
+using CleanArchitecture.Domain.Entities.Wallet;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.EfContext;
 public class AppDbContext : DbContext
@@ -15,4 +11,6 @@ public class AppDbContext : DbContext
 
 
     public DbSet<Users> Users { get; set; }
+    public DbSet<UserWallet> UserWallets { get; set; }
 }
+
