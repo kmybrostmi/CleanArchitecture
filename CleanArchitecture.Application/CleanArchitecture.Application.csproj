@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Entities\UserWalletCommands\UserWalletService.cs~RF1be64f75.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="KavenegarDotNetCore" Version="1.0.5" />
     <PackageReference Include="LazZiya.ImageResize" Version="4.1.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />

@@ -1,6 +1,6 @@
 ﻿using CleanArchitecture.Infrastructure.EfContext;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
-using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWallet;
+using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWaller;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

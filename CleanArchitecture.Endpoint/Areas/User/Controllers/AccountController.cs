@@ -133,4 +133,11 @@ public class AccountController : UserBaseController
         }
         return View();
     }
+
+    [HttpGet("user-wallet")]
+    public async Task<IActionResult> UserWallet(FilterWalletViewModel filter)
+    {
+        filter.UserId = User.GetUserId();
+        return View(await _walletService.FilterWallets(filter));
+    }
 }

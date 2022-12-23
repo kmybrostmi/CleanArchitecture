@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Domain.Entities.Wallet;
 using CleanArchitecture.Domain.ViewModels.Wallet;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
-using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWallet;
+using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWaller;
 
 namespace CleanArchitecture.Application.Entities.UserWalletCommands;
 
@@ -37,6 +37,11 @@ public class UserWalletService : IUserWalletService
         await _walletRepository.CreateWallet(chargeWallet);
         await _walletRepository.Save();
         return chargeWallet.Id;
+    }
+
+    public async Task<FilterWalletViewModel> FilterWallets(FilterWalletViewModel filter)
+    {
+        return await _walletRepository.FilterWallets(filter);
     }
 
     public async Task<UserWallet> GetUserWalletById(Guid userId)
