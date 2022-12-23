@@ -22,5 +22,6 @@ public enum LoginUserResult
     Success,
     IsBlocked,
     NotActive,
-    NotFound
+    NotFound,
+    UserNameOrPasswordIsIncorrect
 }

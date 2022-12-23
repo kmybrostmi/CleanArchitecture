@@ -18,8 +18,7 @@ public class UserRepository : BaseRepository<Users>, IUserRepository
 
     public async Task<Users> GetUserByPhoneNumber(string phoneNumber)
     {
-        var result = await Context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber || x.NationalCode == phoneNumber ||
-                                                                    x.FirstName == phoneNumber || x.LastName == phoneNumber);
+        var result = await Context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         return result;
     }
 

@@ -16,6 +16,9 @@ public interface IUserService
 
     Task<EditUserProfileViewModel> EditUserProfileData(Guid userId);
     Task<EditUserProfileResult> EditUserProfile(Guid userId, IFormFile userAvatar, EditUserProfileViewModel editUser);
+
+
+    Task<ChangePasswordResult> ChangUserPassword(Guid userId, ChangePasswordViewModel changePassword); 
 }
 
 

@@ -77,6 +77,9 @@ namespace CleanArchitecture.Endpoint.Controllers
                     case LoginUserResult.NotFound:
                         TempData[WarningMessage] = "حساب کاربری یافت نشد";
                         break;
+                    case LoginUserResult.UserNameOrPasswordIsIncorrect:
+                        TempData[WarningMessage] = "نام کاربری یا رمزعبور صحیح نیست";
+                        break;
                     case LoginUserResult.IsBlocked:
                         TempData[ErrorMessage] = "حساب کاربری شما مسدود شده است";
                         break;

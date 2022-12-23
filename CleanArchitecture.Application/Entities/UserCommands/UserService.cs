@@ -1,11 +1,9 @@
-﻿using Azure.Core;
-using CleanArchitecture.Application.Extensions;
+﻿using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Helpers.Interfaces;
 using CleanArchitecture.Application.Utilities;
 using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace CleanArchitecture.Application.Entities.UserCommands;
@@ -29,7 +27,7 @@ public class UserService : IUserService
         if (user == null)
             return ActiveAccountResult.NotFound;
 
-        if(user.MobileActiveCode == loginUser.ActiveCode)
+        if (user.MobileActiveCode == loginUser.ActiveCode)
         {
             //user.MobileActiveCode = new Random().Next(1000, 9999).ToString();
             user.IsMobileActive = true;
@@ -41,6 +39,24 @@ public class UserService : IUserService
         return ActiveAccountResult.Error;
     }
 
+    public async Task<ChangePasswordResult> ChangUserPassword(Guid userId, ChangePasswordViewModel changePassword)
+    {
+        var user = await _repository.GetUserById(userId);
+        if (user == null) return ChangePasswordResult.NotFound;
+
+        if (user.Password == _passwordHelper.EncodePasswordMd5(changePassword.CurrentPassword))
+        {
+            if (_passwordHelper.EncodePasswordMd5(changePassword.ConfirmNewPassword) == _passwordHelper.EncodePasswordMd5(changePassword.NewPassword))
+            {
+                user.Password = _passwordHelper.EncodePasswordMd5(changePassword.NewPassword);
+                _repository.Update(user);
+                await _repository.Save();
+                return ChangePasswordResult.Success;
+            }
+        }
+        return ChangePasswordResult.NotMatched;
+    }
+
     public async Task<EditUserProfileResult> EditUserProfile(Guid userId, IFormFile userAvatar, EditUserProfileViewModel editUser)
     {
         var user = await _repository.GetUserById(userId);
@@ -50,8 +66,8 @@ public class UserService : IUserService
         user.FirstName = editUser.FirstName;
         user.LastName = editUser.LastName;
         user.Gender = editUser.UserGender;
-        
-        if(userAvatar.IsImage())
+
+        if (userAvatar.IsImage())
         {
             var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(userAvatar.FileName);
             userAvatar.AddImageToServer(imageName, PathExtensions.UserAvatarOrginServer, 150, 150, PathExtensions.UserAvatarThumbServer);
@@ -101,7 +117,7 @@ public class UserService : IUserService
             if (user.IsBlocked) return LoginUserResult.IsBlocked;
             if (user.IsDeleted) return LoginUserResult.NotFound;
             if (!user.IsMobileActive) return LoginUserResult.NotActive;
-            if (user.Password != _passwordHelper.EncodePasswordMd5(loginUser.Password)) return LoginUserResult.NotFound;
+            if (user.Password != _passwordHelper.EncodePasswordMd5(loginUser.Password)) return LoginUserResult.UserNameOrPasswordIsIncorrect;
 
             return LoginUserResult.Success;
         }
