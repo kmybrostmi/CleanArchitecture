@@ -10,3 +10,9 @@ function ShowMessage(title, text, theme) {
         message: decodeURI(text)
     });
 }
+
+
+function FillPageId(pageId) {
+    $("#PageId").val(pageId);
+    $("#filter-Form").submit();
+}
