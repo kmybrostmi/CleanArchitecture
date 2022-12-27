@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Helpers.Interfaces;
 using CleanArchitecture.Application.Utilities;
 using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.ViewModels.Account;
+using CleanArchitecture.Domain.ViewModels.Admin.UserVm;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using Microsoft.AspNetCore.Http;
 
@@ -95,6 +96,11 @@ public class UserService : IUserService
             UserGender = user.Gender,
             Avatar = user.Avatar,
         };
+    }
+
+    public async Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser)
+    {
+        return await _repository.FilterUser(filterUser);    
     }
 
     public async Task<Users> GetUserById(Guid id)

@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Domain.Entities.Account;
+﻿using CleanArchitecture.Domain.Common.Paging;
+using CleanArchitecture.Domain.Entities.Account;
+using CleanArchitecture.Domain.ViewModels.Admin.UserVm;
 using CleanArchitecture.Infrastructure.EfContext;
 using CleanArchitecture.Infrastructure.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,23 @@ public class UserRepository : BaseRepository<Users>, IUserRepository
     {
         var user = await Context.Users.FirstOrDefaultAsync(x => x.Id == id);
         return user;
+    }
+
+    public async Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser)
+    {
+        var query = Context.Users.AsQueryable();
+
+        if(!string.IsNullOrWhiteSpace(filterUser.SearchTearm))
+        {
+            query = query.Where(x=>x.PhoneNumber.Contains(filterUser.SearchTearm) ||
+                                                      x.FirstName.Contains(filterUser.SearchTearm) ||
+                                                      x.LastName.Contains(filterUser.SearchTearm));
+        }
+
+        var pager = Pager.Build(filterUser.PageId, await query.CountAsync(), filterUser.TakeEntity, filterUser.CountForShowAfterAndBefor);
+        var allData = await query.Paging(pager).ToListAsync();
+
+        return filterUser.SetPaging(pager).SetUsers(allData);
     }
 }
 
