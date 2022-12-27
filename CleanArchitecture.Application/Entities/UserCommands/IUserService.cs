@@ -20,7 +20,10 @@ public interface IUserService
     Task<ChangePasswordResult> ChangUserPassword(Guid userId, ChangePasswordViewModel changePassword); 
 
     //Admin
-    Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser);   
+    Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser);
+    Task<EditUserFromAdminResult> EditUserForAdmin(EditUserProfileForAdminViewModel userProfileForAdminViewModel);
+    Task<EditUserProfileForAdminViewModel> EditUserForAdmin(Guid userId);
+    Task<CreateUserForAdminResult> CreateUserForAdmin(CreateUserForAdminViewModel viewModel);
 }
 
 

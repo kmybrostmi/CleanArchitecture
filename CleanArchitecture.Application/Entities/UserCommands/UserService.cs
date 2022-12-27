@@ -58,6 +58,70 @@ public class UserService : IUserService
         return ChangePasswordResult.NotMatched;
     }
 
+    public async Task<CreateUserForAdminResult> CreateUserForAdmin(CreateUserForAdminViewModel viewModel)
+    {
+        var user = await _repository.GetUserByPhoneNumber(viewModel.PhoneNumber);
+        if (user != null && user.PhoneNumber == viewModel.PhoneNumber)
+            return CreateUserForAdminResult.MobileExists;
+
+        if (user != null && user.NationalCode == viewModel.NationalCode)
+            return CreateUserForAdminResult.NationalCodeExists;
+
+        var createUser = new Users
+        {
+            CreateById = viewModel.CreateBy,
+            Email = "",
+            FirstName = viewModel.FirstName,
+            LastName = viewModel.LastName,
+            IsActived = true,
+            IsMobileActive = true,
+            PhoneNumber = viewModel.PhoneNumber,
+            Gender = viewModel.UserGender,
+            NationalCode = viewModel.NationalCode,
+            Password = _passwordHelper.EncodePasswordMd5(viewModel.Password),
+            Avatar = "",
+            MobileActiveCode = "CreateByAdmin"
+        };
+
+        _repository.Add(createUser);
+        await _repository.AddAsync(createUser);
+        await _repository.Save();
+        return CreateUserForAdminResult.success;
+    }
+
+    public async Task<EditUserFromAdminResult> EditUserForAdmin(EditUserProfileForAdminViewModel userProfileForAdminViewModel)
+    {
+        var user = await _repository.GetUserById(userProfileForAdminViewModel.UserId);
+        if (user != null)
+        {
+            user.FirstName = userProfileForAdminViewModel.FirstName;
+            user.LastName = userProfileForAdminViewModel.LastName;
+            user.Password = _passwordHelper.EncodePasswordMd5(userProfileForAdminViewModel.Password);
+            user.Gender = userProfileForAdminViewModel.UserGender;
+            _repository.Update(user);
+            await _repository.Save();
+            return EditUserFromAdminResult.Success;
+        }
+        return EditUserFromAdminResult.NotFound;
+    }
+
+    public async Task<EditUserProfileForAdminViewModel> EditUserForAdmin(Guid userId)
+    {
+        var user = await _repository.GetUserById(userId);
+        if (user == null)
+            throw new Exception();
+
+        return new EditUserProfileForAdminViewModel
+        {
+            UserId = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Password = user.Password.ToString(),
+            PhoneNumber = user.PhoneNumber,
+            UserGender = user.Gender
+        };
+    }
+
     public async Task<EditUserProfileResult> EditUserProfile(Guid userId, IFormFile userAvatar, EditUserProfileViewModel editUser)
     {
         var user = await _repository.GetUserById(userId);
@@ -100,7 +164,7 @@ public class UserService : IUserService
 
     public async Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser)
     {
-        return await _repository.FilterUser(filterUser);    
+        return await _repository.FilterUser(filterUser);
     }
 
     public async Task<Users> GetUserById(Guid id)
