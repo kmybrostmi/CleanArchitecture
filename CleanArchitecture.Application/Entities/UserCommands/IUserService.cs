@@ -24,6 +24,7 @@ public interface IUserService
     Task<EditUserFromAdminResult> EditUserForAdmin(EditUserProfileForAdminViewModel userProfileForAdminViewModel);
     Task<EditUserProfileForAdminViewModel> EditUserForAdmin(Guid userId);
     Task<CreateUserForAdminResult> CreateUserForAdmin(CreateUserForAdminViewModel viewModel);
+    Task<RemoveUserForAdminResult> RemoveUserForAdmin(Guid userId, Guid modifiedId);
 }
 
 

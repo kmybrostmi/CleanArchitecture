@@ -232,4 +232,18 @@ public class UserService : IUserService
             throw ex;
         }
     }
+
+    public async Task<RemoveUserForAdminResult> RemoveUserForAdmin(Guid userId, Guid modifiedId)
+    {
+        var user = await _repository.GetUserById(userId);
+        if (user == null) return RemoveUserForAdminResult.failed;
+        if (user.IsBlocked == true) return RemoveUserForAdminResult.failed;
+
+        user.IsDeleted = true;
+        user.ModifiedById = modifiedId;
+
+        _repository.Update(user);
+        await _repository.Save();
+        return RemoveUserForAdminResult.Success;
+    }
 }

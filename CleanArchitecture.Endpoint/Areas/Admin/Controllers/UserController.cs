@@ -73,10 +73,28 @@ public class UserController : AdminBaseController
                 TempData[ErrorMessage] = "خطایی در انجام عملیات رخ داد";
                 break;
             case CreateUserForAdminResult.success:
-                TempData[SuccessMessage] = "کاربری با مشخصات وارد شده یافت نشد";
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
                 return RedirectToAction("FilterUser");
         }
         return RedirectToAction("FilterUser",viewModel);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteUser(Guid userId)
+    {
+        var modifiedId = User.GetUserId();
+
+        var result = await _userService.RemoveUserForAdmin(userId,modifiedId);
+        switch (result)
+        {
+            case RemoveUserForAdminResult.failed:
+                TempData[ErrorMessage] = "عملیات با شکست مواجه شد";
+                break;
+            case RemoveUserForAdminResult.Success:
+                TempData[SuccessMessage] = "عملیات با موفقیت انجام شد";
+                return RedirectToAction("FilterUser");
+        }
+        return RedirectToAction("FilterUser");
     }
 }
 

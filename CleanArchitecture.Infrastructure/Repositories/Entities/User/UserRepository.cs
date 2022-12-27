@@ -42,11 +42,11 @@ public class UserRepository : BaseRepository<Users>, IUserRepository
 
     public async Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser)
     {
-        var query = Context.Users.AsQueryable();
+        var query = Context.Users.AsQueryable().Where(x => x.IsActived && !x.IsDeleted);
 
         if(!string.IsNullOrWhiteSpace(filterUser.SearchTearm))
         {
-            query = query.Where(x=>x.PhoneNumber.Contains(filterUser.SearchTearm) ||
+            query = query.Where(x => x.PhoneNumber.Contains(filterUser.SearchTearm) ||
                                                       x.FirstName.Contains(filterUser.SearchTearm) ||
                                                       x.LastName.Contains(filterUser.SearchTearm));
         }
