@@ -12,5 +12,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Users> Users { get; set; }
     public DbSet<UserWallet> UserWallets { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
 }
+
 
