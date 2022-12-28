@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Infrastructure.EfContext;
+using CleanArchitecture.Infrastructure.Repositories.Entities.Roles;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWaller;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public static class ConfigureService
 
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IUserWalletRepository, UserWalletRepository>();
+        services.AddTransient<IRoleRepository, RoleRepository>();
 
         return services;
     }

@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Entities.UserCommands;
+﻿using CleanArchitecture.Application.Entities.RolesCommands;
+using CleanArchitecture.Application.Entities.UserCommands;
 using CleanArchitecture.Application.Entities.UserCommands.Create;
 using CleanArchitecture.Application.Entities.UserWalletCommands;
 using CleanArchitecture.Application.Helpers.Interfaces;
@@ -16,6 +17,7 @@ public static class ConfigureService
 
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUserWalletService, UserWalletService>();
+        services.AddTransient<IRoleService, RoleService>();
         services.AddTransient<IPasswordHelper, PasswordHelper>();
         services.AddMediatR(typeof(RegisterUserCommand).Assembly);
         services.AddScoped<ISmsService, SmsService>();

@@ -63,7 +63,7 @@
                                     </td>
                                     <td>
                                         <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="User" asp-action="EditUser" asp-route-userId="@user.Id">ویرایش</a>
-                                        <a class="btn btn-Error btn-sm" asp-area="Admin" asp-controller="User" asp-action="DeleteUser" asp-route-userId="@user.Id" onclick="return confirm('از حذف مطمئن هستید؟')">حذف</a>
+                                        <a class="btn btn-danger btn-sm" asp-area="Admin" asp-controller="User" asp-action="DeleteUser" asp-route-userId="@user.Id" onclick="return confirm('از حذف مطمئن هستید؟')">حذف</a>
                                     </td>
                                 </tr>
                                 index++;

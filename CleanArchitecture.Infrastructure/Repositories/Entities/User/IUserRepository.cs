@@ -12,7 +12,7 @@ public interface IUserRepository : IBaseRepository<Users>
     Task<Users> GetUserById(Guid id);
 
     //Admin
-    Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser); 
+    Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser);
 }
 
 
