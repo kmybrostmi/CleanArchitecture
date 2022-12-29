@@ -6,7 +6,7 @@ namespace CleanArchitecture.Application.Entities.Products;
 
 public interface IProductService
 {
-    Task<List<ProductCategory>> GetAllProductsCategory();
+    Task<List<Category>> GetAllCategories();
 
     Task<CreateProductResult> CreateProduct(CreateProductViewModel productViewModel, IFormFile productImage);
     Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel productViewModel, IFormFile productCategoryImage);

@@ -28,7 +28,7 @@ public class CreateProductViewModel
     public bool IsActive { get; set; }
     public Guid CreateBy { get; set; }
 
-    public List<Guid> SelectedCategory { get; set; }
+    public List<Guid> ProductCategory { get; set; }
 }
 public enum CreateProductResult
 {

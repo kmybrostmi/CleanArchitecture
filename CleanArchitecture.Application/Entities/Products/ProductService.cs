@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Utilities;
+using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.Entities.Products;
 using CleanArchitecture.Domain.ViewModels.Admin.ProductVm;
 using CleanArchitecture.Infrastructure.Repositories.Entities.Products;
@@ -97,6 +98,12 @@ public class ProductService : IProductService
             product.ProductImageName = imageName;
         }
 
+        await _repository.RemoveAllProductCategoryForProduct(product.Id);
+        await _repository.AddSelectedProductCategoryForProduct(productViewModel.ProductCategory, product.Id);
+
+        product.ProductsCategories.First(x => x.ProductId == product.Id).CreateDate = DateTime.Now;
+        product.ProductsCategories.First(x => x.ProductId == product.Id).CreateById = productViewModel.ModifiedBy;
+
         _repository.Update(product);
         await _repository.Save();
         return EditProductResult.Success;
@@ -127,9 +134,9 @@ public class ProductService : IProductService
         return await _repository.FilterProduct(filterProducts); 
     }
 
-    public async Task<List<ProductCategory>> GetAllProductsCategory()
+    public async Task<List<Category>> GetAllCategories()
     {
-        return await _repository.GetAllProductsCategory();
+        return await _repository.GetAllCategories();
     }
 
     public async Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter)

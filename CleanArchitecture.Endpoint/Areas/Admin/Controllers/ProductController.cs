@@ -17,19 +17,19 @@ public class ProductController : AdminBaseController
     [HttpGet]
     public async Task<IActionResult> FilterProduct(FilterProductsViewModel filterProducts)
     {
-        var result = await _productService.FilterProduct(filterProducts);  
+        var result = await _productService.FilterProduct(filterProducts);
         return View(result);
     }
 
     [HttpGet]
     public async Task<IActionResult> CreateProduct()
     {
-        TempData["Categories"] = _productService.GetAllProductsCategory();
+        TempData["Categories"] = _productService.GetAllCategories();
         return View();
     }
 
-    [HttpPost,AutoValidateAntiforgeryToken]
-    public async Task<IActionResult> CreateProduct(CreateProductViewModel productViewModel,IFormFile productImage)
+    [HttpPost, AutoValidateAntiforgeryToken]
+    public async Task<IActionResult> CreateProduct(CreateProductViewModel productViewModel, IFormFile productImage)
     {
         //TempData["Categories"] = await _productService.GetAllProductsCategory();
 
@@ -53,6 +53,8 @@ public class ProductController : AdminBaseController
     [HttpGet]
     public async Task<IActionResult> EditProduct(Guid productId)
     {
+        TempData["Categories"] = await _productService.GetAllCategories();
+
         var result = await _productService.EditProduct(productId);
         return View(result);
     }
@@ -61,6 +63,9 @@ public class ProductController : AdminBaseController
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> EditProduct(EditProductViewModel productViewModel)
     {
+        //TempData["Categories"] = await _productService.GetAllCategories();
+        productViewModel.ModifiedBy = User.GetUserId();
+
         var result = await _productService.EditProduct(productViewModel);
 
         switch (result)
@@ -79,7 +84,6 @@ public class ProductController : AdminBaseController
     }
 
 
-
     [HttpGet]
     public async Task<IActionResult> FilterCategory(FilterCategoryViewModel filterCategory)
     {
@@ -87,8 +91,31 @@ public class ProductController : AdminBaseController
         return View(result);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> CreateCategory()
+    {
+        return View();
+    }
 
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateCategory(CreateCategoryViewModel createCategoryView, IFormFile image)
+    {
+        var result = await _productService.CreateCategory(createCategoryView, image);
+        switch (result)
+        {
+            case CreateCategoryResult.IsExistUrlName:
+                TempData[WarningMessage] = "اسم Url تکراری است";
+                break;
+            case CreateCategoryResult.Success:
+                TempData[SuccessMessage] = "دسته بندی با موفقیت ثبت شد";
+                return RedirectToAction("FilterCategory");
+        }
+        return View(createCategoryView);
+    }
 }
+
+
 
 
 

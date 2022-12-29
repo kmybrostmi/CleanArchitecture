@@ -16,6 +16,26 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
     }
 
+    public async Task AddSelectedProductCategoryForProduct(List<Guid> selectedProductCategory, Guid productId)
+    {
+        if(selectedProductCategory!=null && selectedProductCategory.Any())
+        {
+            var productCategories = new List<ProductCategory>();
+
+            foreach (var categoryId in selectedProductCategory)
+            {
+                productCategories.Add(new ProductCategory
+                {
+                    ProductId = productId,
+                    CategoryId = categoryId
+                });
+            }
+
+            await Context.ProductsCategories.AddRangeAsync(productCategories);
+            await Context.SaveChangesAsync(); 
+        }
+    }
+
     public async Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filter)
     {
         var query = Context.Products
@@ -69,13 +89,23 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         return filter.SetPaging(pager).SetProducts(allData);
     }
 
-    public async Task<List<ProductCategory>> GetAllProductsCategory()
+    public async Task<List<Category>> GetAllCategories()
     {
-        return await Context.ProductsCategories.Where(x => x.IsActived && !x.IsDeleted).ToListAsync();
+        return await Context.Categories.Where(x => x.IsActived && !x.IsDeleted).ToListAsync();
     }
 
     public async Task<Product> GetProductById(Guid productId)
     {
         return await Context.Products.Include(x=>x.ProductsCategories).ThenInclude(x=>x.Category).SingleOrDefaultAsync(x => x.Id == productId);
+    }
+
+    public async Task RemoveAllProductCategoryForProduct(Guid productId)
+    {
+        var product = await Context.Products.FirstOrDefaultAsync(x => x.Id == productId);
+
+        if (product.ProductsCategories != null && product.ProductsCategories.Any())
+        {
+            Context.ProductsCategories.RemoveRange(product.ProductsCategories);
+        }
     }
 }

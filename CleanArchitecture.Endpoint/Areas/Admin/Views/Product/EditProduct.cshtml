@@ -82,22 +82,35 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-4">
 
             <div class="card shadow-sm">
                 <div class="card-body">
+                    <p>دسته بندی ها</p>
                     @if (categories != null && categories.Any())
                     {
                         @foreach (var category in categories)
                         {
-                            var selectedCategory = Model.ProductCategory.Any(c => c == category.Id);
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" @(selectedCategory?"checked":"") name="@nameof(Model.ProductCategory)" value="@category.Id" />
-                                    <span class="text">@category.Title</span>
-                                </label>
-                            </div>
+                            try
+                            {
+                                var selectedCategory = Model.ProductCategory.Any(c => c == category.Id);
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" @(selectedCategory?"checked":"") name="@nameof(Model.ProductCategory)" value="@category.Id" />
+                                        <span class="text">@category.Title</span>
+                                    </label>
+                                </div>
+                            }
+                            catch (Exception)
+                            {
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="@nameof(Model.ProductCategory)" value="@category.Id" />
+                                        <span class="text">@category.Title</span>
+                                    </label>
+                                </div>
+                            }
                         }
                     }
                 </div>
