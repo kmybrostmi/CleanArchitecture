@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\img\category\thumb\" />
+    <Folder Include="wwwroot\img\category\orgin\" />
+    <Folder Include="wwwroot\img\product\thumb\" />
+    <Folder Include="wwwroot\img\product\orgin\" />
     <Folder Include="wwwroot\img\userAvatar\orgin\" />
     <Folder Include="wwwroot\img\userAvatar\thumb\" />
   </ItemGroup>

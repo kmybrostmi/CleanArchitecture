@@ -1,14 +1,11 @@
-﻿using CleanArchitecture.Application.Entities.UserCommands;
-using CleanArchitecture.Application.Entities.UserCommands.Create;
-using CleanArchitecture.Application.Entities.UserCommands.Login;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using CleanArchitecture.Domain.ViewModels.Account;
 using GoogleReCaptcha.V3.Interface;
-using Microsoft.Win32;
+using CleanArchitecture.Application.Entities.User;
 
 namespace CleanArchitecture.Endpoint.Controllers
 {

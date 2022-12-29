@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Entities.RolesCommands;
+﻿using CleanArchitecture.Application.Entities.Roles;
 using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Helpers.Interfaces;
 using CleanArchitecture.Application.Utilities;
@@ -9,7 +9,7 @@ using CleanArchitecture.Infrastructure.Repositories.Entities.Roles;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using Microsoft.AspNetCore.Http;
 
-namespace CleanArchitecture.Application.Entities.UserCommands;
+namespace CleanArchitecture.Application.Entities.User;
 
 public class UserService : IUserService
 {
@@ -18,7 +18,7 @@ public class UserService : IUserService
     private readonly ISmsService _smsService;
     private readonly IRoleRepository _roleRepository;
 
-    public UserService(IUserRepository repository, IPasswordHelper passwordHelper, ISmsService smsService,IRoleRepository roleRepository)
+    public UserService(IUserRepository repository, IPasswordHelper passwordHelper, ISmsService smsService, IRoleRepository roleRepository)
     {
         _repository = repository;
         _passwordHelper = passwordHelper;
@@ -132,7 +132,7 @@ public class UserService : IUserService
             Password = user.Password.ToString(),
             PhoneNumber = user.PhoneNumber,
             UserGender = user.Gender,
-            RoleId = user.UserRoles.Where(x=>x.UserId == user.Id).Select(x=>x.RoleId).ToList()
+            RoleId = user.UserRoles.Where(x => x.UserId == user.Id).Select(x => x.RoleId).ToList()
         };
     }
 

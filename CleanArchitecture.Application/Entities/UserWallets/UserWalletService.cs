@@ -3,20 +3,20 @@ using CleanArchitecture.Domain.ViewModels.Wallet;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWaller;
 
-namespace CleanArchitecture.Application.Entities.UserWalletCommands;
+namespace CleanArchitecture.Application.Entities.UserWallets;
 
 public class UserWalletService : IUserWalletService
 {
     private readonly IUserWalletRepository _walletRepository;
     private readonly IUserRepository _userRepository;
 
-    public UserWalletService(IUserWalletRepository walletRepository,IUserRepository userRepository)
-	{
+    public UserWalletService(IUserWalletRepository walletRepository, IUserRepository userRepository)
+    {
         _walletRepository = walletRepository;
         _userRepository = userRepository;
     }
 
-    public async Task<Guid> ChargeWallet(Guid userId,Guid createById, ChargeWalletViewModel walletViewModel, string description)
+    public async Task<Guid> ChargeWallet(Guid userId, Guid createById, ChargeWalletViewModel walletViewModel, string description)
     {
         var user = await _userRepository.GetUserById(userId);
         if (user == null)
@@ -51,7 +51,7 @@ public class UserWalletService : IUserWalletService
 
     public async Task<bool> UpdateWalletForCharge(UserWallet userWallet)
     {
-        if(userWallet != null)
+        if (userWallet != null)
         {
             userWallet.IsPay = true;
             _walletRepository.Update(userWallet);

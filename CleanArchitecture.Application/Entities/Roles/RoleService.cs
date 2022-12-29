@@ -2,7 +2,7 @@
 using CleanArchitecture.Domain.ViewModels.Admin.RoleVm;
 using CleanArchitecture.Infrastructure.Repositories.Entities.Roles;
 
-namespace CleanArchitecture.Application.Entities.RolesCommands;
+namespace CleanArchitecture.Application.Entities.Roles;
 
 public class RoleService : IRoleService
 {
@@ -48,11 +48,11 @@ public class RoleService : IRoleService
 
         if (viewModel.SelectedPermissions == null)
             return CreateOrEditRoleResult.NotExistPermissions;
-        
+
 
         await _repository.RemoveAllRolePermission(role.Id);
 
-        await _repository.AddRolePermission(viewModel.SelectedPermissions,role.Id);
+        await _repository.AddRolePermission(viewModel.SelectedPermissions, role.Id);
 
         await _repository.Save();
 

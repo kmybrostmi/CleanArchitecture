@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Domain.Entities.Account;
+using CleanArchitecture.Domain.Entities.Products;
 using CleanArchitecture.Domain.Entities.Wallet;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,17 @@ public class AppDbContext : DbContext
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+
+
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductFeature> ProductFeatures { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<ProductGalleries> ProductGalleries { get; set; }
+    public DbSet<ProductCategory> ProductsCategories { get; set; }
 }
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Entities.UserCommands;
+﻿using CleanArchitecture.Application.Entities.User;
 using CleanArchitecture.Application.Extensions;
 using Microsoft.AspNetCore.Mvc;
 

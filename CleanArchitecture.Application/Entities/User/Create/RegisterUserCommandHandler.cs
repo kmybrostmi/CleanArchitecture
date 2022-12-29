@@ -5,7 +5,7 @@ using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using MediatR;
 
-namespace CleanArchitecture.Application.Entities.UserCommands.Create;
+namespace CleanArchitecture.Application.Entities.User.Create;
 
 public class RegisterUserCommandHandler : IBaseCommandHandler<RegisterUserCommand, RegisterUserResult>
 {
@@ -21,7 +21,7 @@ public class RegisterUserCommandHandler : IBaseCommandHandler<RegisterUserComman
     {
         try
         {
-            if(!await _repository.IsExistsPhoneNumber(request.RegisterUserViewModel.PhoneNumber))
+            if (!await _repository.IsExistsPhoneNumber(request.RegisterUserViewModel.PhoneNumber))
             {
                 var user = new Users()
                 {

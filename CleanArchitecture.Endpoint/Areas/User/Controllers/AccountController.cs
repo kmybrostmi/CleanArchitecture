@@ -1,5 +1,5 @@
-﻿using CleanArchitecture.Application.Entities.UserCommands;
-using CleanArchitecture.Application.Entities.UserWalletCommands;
+﻿using CleanArchitecture.Application.Entities.User;
+using CleanArchitecture.Application.Entities.UserWallets;
 using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Domain.ViewModels.Wallet;

@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Infrastructure.EfContext;
+using CleanArchitecture.Infrastructure.Repositories.Entities.Products;
 using CleanArchitecture.Infrastructure.Repositories.Entities.Roles;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using CleanArchitecture.Infrastructure.Repositories.Entities.UsersWaller;
@@ -16,6 +17,8 @@ public static class ConfigureService
 
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IUserWalletRepository, UserWalletRepository>();
+        services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
         services.AddTransient<IRoleRepository, RoleRepository>();
 
         return services;

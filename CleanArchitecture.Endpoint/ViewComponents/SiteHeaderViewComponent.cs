@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Entities.UserCommands;
+﻿using CleanArchitecture.Application.Entities.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Endpoint.ViewComponents;

@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.ViewModels.Account;
 
-namespace CleanArchitecture.Application.Entities.UserCommands.Create;
+namespace CleanArchitecture.Application.Entities.User.Create;
 
 public class RegisterUserCommand : IBaseCommand<RegisterUserResult>
 {

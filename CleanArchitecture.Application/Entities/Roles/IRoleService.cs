@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.ViewModels.Admin.RoleVm;
 
-namespace CleanArchitecture.Application.Entities.RolesCommands;
+namespace CleanArchitecture.Application.Entities.Roles;
 public interface IRoleService
 {
     Task<FilterRoleViewModel> FilterRole(FilterRoleViewModel filterRoleViewModel);

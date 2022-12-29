@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Entities.RolesCommands;
+﻿using CleanArchitecture.Application.Entities.Roles;
 using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Domain.ViewModels.Admin.RoleVm;
 using Microsoft.AspNetCore.Mvc;

@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Entities\RolesCommands\RoleService.cs~RF35113bc3.TMP" />
-    <None Remove="Entities\UserWalletCommands\UserWalletService.cs~RF1be64f75.TMP" />
+    <None Remove="Entities\Roles\RoleService.cs~RF35113bc3.TMP" />
+    <None Remove="Entities\UserWallets\UserWalletService.cs~RF1be64f75.TMP" />
   </ItemGroup>
 
   <ItemGroup>
