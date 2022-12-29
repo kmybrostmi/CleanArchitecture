@@ -9,10 +9,19 @@ public interface IRoleRepository : IBaseRepository<Role>
 
     Task AddRolePermission(List<Guid> selctedPermission, Guid roleId);
     Task RemoveAllRolePermission(Guid roleId);
-
     Task<Role> GetRoleById(Guid roleId);
-
     Task<List<Permission>> GetAllActiveRolePermission();
+
+    //UserRole
+    Task<List<Role>> GetAllActiveRoles();
+    Task AddUserRole(List<Guid> selectedRole, Guid userId);
+    Task RemoveAllUserRoles(Guid userId);
 }
+
+
+
+
+
+
 
 

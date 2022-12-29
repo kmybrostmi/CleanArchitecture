@@ -60,14 +60,9 @@ public class RoleController : AdminBaseController
     }
 
 
-
-
-
-
     [HttpGet]
-    public async Task<IActionResult> CreateRoleLoad()
+    public async Task<IActionResult> CreateRole()
     {
-        ViewData["Permissions"] = await _roleService.GetAllActiveRolePermission();
         return View();
     }
 
@@ -75,8 +70,6 @@ public class RoleController : AdminBaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateRole(CreateOrEditRoleViewModel viewModel)
     {
-        ViewData["Permissions"] = await _roleService.GetAllActiveRolePermission();
-
         viewModel.CreateBy = User.GetUserId();
 
         var result = await _roleService.CreateOrEditRoleForAdmin(viewModel);
@@ -85,10 +78,6 @@ public class RoleController : AdminBaseController
         {
             case CreateOrEditRoleResult.NotFound:
                 TempData[ErrorMessage] = "نقش یافت نشد";
-                break;
-
-            case CreateOrEditRoleResult.NotExistPermissions:
-                TempData[WarningMessage] = "دسترسی های نقش انتخاب نشده";
                 break;
 
             case CreateOrEditRoleResult.Success:

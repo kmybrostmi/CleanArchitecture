@@ -26,6 +26,10 @@ public class EditUserProfileForAdminViewModel
     [Display(Name = "گذرواژه")]
     [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
     public string Password { get; set; }
+
+    public List<Guid> RoleId{ get; set; }
+
+    public Guid ModifiedBy { get; set; }
 }
 
 public enum EditUserFromAdminResult
@@ -33,4 +37,7 @@ public enum EditUserFromAdminResult
     NotFound,
     Success
 }
+
+
+
 

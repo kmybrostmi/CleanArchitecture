@@ -68,5 +68,42 @@ public class RoleRepository : BaseRepository<Role>, IRoleRepository
         var result = await Context.Permissions.Where(x=>x.IsActived && !x.IsDeleted).ToListAsync();
         return result;  
     }
+
+    public async Task<List<Role>> GetAllActiveRoles()
+    {
+        var result = await Context.Roles.Where(x => x.IsActived && !x.IsDeleted).ToListAsync();
+        return result;
+    }
+
+    public async Task AddUserRole(List<Guid> selectedRole, Guid userId)
+    {
+        if(selectedRole != null && selectedRole.Any())
+        {
+            var userRoles = new List<UserRole>();
+
+            foreach (var roleId in selectedRole)
+            {
+                userRoles.Add(new UserRole
+                {
+                    RoleId = roleId,
+                    UserId = userId
+                });
+            }
+
+            await Context.UserRoles.AddRangeAsync(userRoles);
+            await Context.SaveChangesAsync();
+        }
+    }
+
+    public async Task RemoveAllUserRoles(Guid userId)
+    {
+        var allUserRoles = await Context.UserRoles.Where(x => x.UserId == userId).ToListAsync();
+
+        if(allUserRoles.Any())
+        {
+            Context.UserRoles.RemoveRange(allUserRoles);
+            await Context.SaveChangesAsync();
+        }
+    }
 }
 

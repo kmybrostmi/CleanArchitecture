@@ -9,7 +9,9 @@ public interface IRoleService
     Task<CreateOrEditRoleResult> CreateOrEditRoleForAdmin(CreateOrEditRoleViewModel viewModel);
     Task<CreateOrEditRoleViewModel> GetRoleById(Guid roleId);
     Task<List<Permission>> GetAllActiveRolePermission();
+    Task<List<Role>> GetAllActiveRoles();
 }
+
 
 
 

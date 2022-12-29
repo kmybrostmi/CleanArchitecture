@@ -56,6 +56,15 @@ public class UserRepository : BaseRepository<Users>, IUserRepository
 
         return filterUser.SetPaging(pager).SetUsers(allData);
     }
+
+    public async Task<Users> GetUserAndRolesById(Guid id)
+    {
+        var query = await Context.Users
+                                 .Include(x => x.UserRoles)
+                                 .FirstOrDefaultAsync(x => x.Id == id);
+
+        return query;
+    }
 }
 
 

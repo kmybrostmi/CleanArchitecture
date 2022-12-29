@@ -10,10 +10,12 @@ public interface IUserRepository : IBaseRepository<Users>
     Task<Users> GetUserByPhoneNumber(string phoneNumber);
     void UpdateUser(Users user);
     Task<Users> GetUserById(Guid id);
+    Task<Users> GetUserAndRolesById(Guid id);
 
     //Admin
     Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser);
 }
+
 
 
 

@@ -1,9 +1,11 @@
-﻿using CleanArchitecture.Application.Extensions;
+﻿using CleanArchitecture.Application.Entities.RolesCommands;
+using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Helpers.Interfaces;
 using CleanArchitecture.Application.Utilities;
 using CleanArchitecture.Domain.Entities.Account;
 using CleanArchitecture.Domain.ViewModels.Account;
 using CleanArchitecture.Domain.ViewModels.Admin.UserVm;
+using CleanArchitecture.Infrastructure.Repositories.Entities.Roles;
 using CleanArchitecture.Infrastructure.Repositories.Entities.User;
 using Microsoft.AspNetCore.Http;
 
@@ -14,12 +16,14 @@ public class UserService : IUserService
     private readonly IUserRepository _repository;
     private readonly IPasswordHelper _passwordHelper;
     private readonly ISmsService _smsService;
+    private readonly IRoleRepository _roleRepository;
 
-    public UserService(IUserRepository repository, IPasswordHelper passwordHelper, ISmsService smsService)
+    public UserService(IUserRepository repository, IPasswordHelper passwordHelper, ISmsService smsService,IRoleRepository roleRepository)
     {
         _repository = repository;
         _passwordHelper = passwordHelper;
         _smsService = smsService;
+        _roleRepository = roleRepository;
     }
 
     public async Task<ActiveAccountResult> ActiveAccount(ActiveAccountViewModel loginUser)
@@ -91,14 +95,23 @@ public class UserService : IUserService
 
     public async Task<EditUserFromAdminResult> EditUserForAdmin(EditUserProfileForAdminViewModel userProfileForAdminViewModel)
     {
-        var user = await _repository.GetUserById(userProfileForAdminViewModel.UserId);
+        var user = await _repository.GetUserAndRolesById(userProfileForAdminViewModel.UserId);
         if (user != null)
         {
             user.FirstName = userProfileForAdminViewModel.FirstName;
             user.LastName = userProfileForAdminViewModel.LastName;
             user.Password = _passwordHelper.EncodePasswordMd5(userProfileForAdminViewModel.Password);
             user.Gender = userProfileForAdminViewModel.UserGender;
+            user.ModifiedDate = DateTime.Now;
+            user.ModifiedById = userProfileForAdminViewModel.ModifiedBy;
+
+            await _roleRepository.RemoveAllUserRoles(user.Id);
+            await _roleRepository.AddUserRole(userProfileForAdminViewModel.RoleId, user.Id);
+
+            user.UserRoles.First(x => x.UserId == user.Id).CreateDate = DateTime.Now;
+            user.UserRoles.First(x => x.UserId == user.Id).CreateById = userProfileForAdminViewModel.ModifiedBy;
             _repository.Update(user);
+
             await _repository.Save();
             return EditUserFromAdminResult.Success;
         }
@@ -107,7 +120,7 @@ public class UserService : IUserService
 
     public async Task<EditUserProfileForAdminViewModel> EditUserForAdmin(Guid userId)
     {
-        var user = await _repository.GetUserById(userId);
+        var user = await _repository.GetUserAndRolesById(userId);
         if (user == null)
             throw new Exception();
 
@@ -118,7 +131,8 @@ public class UserService : IUserService
             LastName = user.LastName,
             Password = user.Password.ToString(),
             PhoneNumber = user.PhoneNumber,
-            UserGender = user.Gender
+            UserGender = user.Gender,
+            RoleId = user.UserRoles.Where(x=>x.UserId == user.Id).Select(x=>x.RoleId).ToList()
         };
     }
 

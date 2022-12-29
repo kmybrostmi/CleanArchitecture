@@ -3,7 +3,7 @@
 namespace CleanArchitecture.Domain.Entities.Account;
 public class UserRole:BaseEntity
 {
-    public Users Users { get; set; }
+    public Users User { get; set; }
     public Guid UserId { get; set; }
 
     public Role Role { get; set; }

@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Entities.UserCommands;
+﻿using CleanArchitecture.Application.Entities.RolesCommands;
+using CleanArchitecture.Application.Entities.UserCommands;
 using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Domain.ViewModels.Admin.UserVm;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,12 @@ namespace CleanArchitecture.Endpoint.Areas.Admin.Controllers;
 public class UserController : AdminBaseController
 {
     private readonly IUserService _userService;
+    private readonly IRoleService _roleService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IRoleService roleService)
     {
         _userService = userService;
+        _roleService = roleService;
     }
     public async Task<IActionResult> FilterUser(FilterUserViewModel filterUser)
     {
@@ -27,12 +30,18 @@ public class UserController : AdminBaseController
         {
             return View();
         }
+
+        ViewData["Roles"] = await _roleService.GetAllActiveRoles();
         return View(result);
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> EditUser(EditUserProfileForAdminViewModel userProfileForAdminViewModel)
     {
+        ViewData["Roles"] = await _roleService.GetAllActiveRoles();
+
+        userProfileForAdminViewModel.ModifiedBy = User.GetUserId();
+
         var result = await _userService.EditUserForAdmin(userProfileForAdminViewModel);
 
         switch (result)
@@ -97,6 +106,8 @@ public class UserController : AdminBaseController
         return RedirectToAction("FilterUser");
     }
 }
+
+
 
 
 

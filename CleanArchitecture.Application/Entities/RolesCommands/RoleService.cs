@@ -21,14 +21,16 @@ public class RoleService : IRoleService
             {
                 RoleTitle = viewModel.RoleTitle,
                 CreateById = viewModel.CreateBy,
+                CreateDate = DateTime.Now
             };
 
-            if (viewModel.SelectedPermissions == null)
-            {
-                return CreateOrEditRoleResult.NotExistPermissions;
-            }
+            //if (viewModel.SelectedPermissions == null)
+            //{
+            //    return CreateOrEditRoleResult.NotExistPermissions;
+            //}
 
-            await _repository.AddRolePermission(viewModel.SelectedPermissions, newRole.Id);
+            //await _repository.AddRolePermission(viewModel.SelectedPermissions, newRole.Id);
+            _repository.Add(newRole);
             await _repository.Save();
             return CreateOrEditRoleResult.Success;
         }
@@ -66,6 +68,12 @@ public class RoleService : IRoleService
     public async Task<List<Permission>> GetAllActiveRolePermission()
     {
         var result = await _repository.GetAllActiveRolePermission();
+        return result;
+    }
+
+    public async Task<List<Role>> GetAllActiveRoles()
+    {
+        var result = await _repository.GetAllActiveRoles();
         return result;
     }
 
