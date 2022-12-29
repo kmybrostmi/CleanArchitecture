@@ -73,4 +73,9 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         return await Context.ProductsCategories.Where(x => x.IsActived && !x.IsDeleted).ToListAsync();
     }
+
+    public async Task<Product> GetProductById(Guid productId)
+    {
+        return await Context.Products.Include(x=>x.ProductsCategories).ThenInclude(x=>x.Category).SingleOrDefaultAsync(x => x.Id == productId);
+    }
 }

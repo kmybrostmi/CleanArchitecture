@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.Domain.ViewModels.Admin.ProductVm;
 
-public class CreateProductCategoryViewModel
+public class CreateCategoryViewModel
 {
     [Display(Name = "عنوان")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -22,8 +22,9 @@ public class CreateProductCategoryViewModel
     //public string ImageName { get; set; }
 
 }
-public enum CreateProductCategoryResult
+public enum CreateCategoryResult
 {
     IsExistUrlName,
     Success
 }
+

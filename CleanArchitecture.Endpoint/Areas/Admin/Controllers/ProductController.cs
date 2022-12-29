@@ -48,6 +48,46 @@ public class ProductController : AdminBaseController
         }
         return View(productViewModel);
     }
+
+
+    [HttpGet]
+    public async Task<IActionResult> EditProduct(Guid productId)
+    {
+        var result = await _productService.EditProduct(productId);
+        return View(result);
+    }
+
+
+    [HttpPost, AutoValidateAntiforgeryToken]
+    public async Task<IActionResult> EditProduct(EditProductViewModel productViewModel)
+    {
+        var result = await _productService.EditProduct(productViewModel);
+
+        switch (result)
+        {
+            case EditProductResult.NotFound:
+                TempData[WarningMessage] = "محصولی با مشخصات وارد شده یافت نشد";
+                break;
+            case EditProductResult.NotProductSelectedCategoryHasNull:
+                TempData[WarningMessage] = "لطفا دسته بندی محصول را وارد کنید";
+                break;
+            case EditProductResult.Success:
+                TempData[SuccessMessage] = "ویرایش محصول با موفقیت انجام شد";
+                return RedirectToAction("FilterProduct");
+        }
+        return View(productViewModel);
+    }
+
+
+
+    [HttpGet]
+    public async Task<IActionResult> FilterCategory(FilterCategoryViewModel filterCategory)
+    {
+        var result = await _productService.FilterCategory(filterCategory);
+        return View(result);
+    }
+
+
 }
 
 

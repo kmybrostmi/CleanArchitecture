@@ -5,9 +5,10 @@ using CleanArchitecture.Domain.ViewModels.Admin.ProductVm;
 using CleanArchitecture.Infrastructure.Repositories.Common;
 
 namespace CleanArchitecture.Infrastructure.Repositories.Entities.Products;
-public interface IProductRepository : IBaseRepository<Product>
+
+public interface ICategoryRepository : IBaseRepository<Category>
 {
-    Task<List<ProductCategory>> GetAllProductsCategory();
-    Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filter);
-    Task<Product> GetProductById(Guid productId);
+    Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter);    
 }
+
+

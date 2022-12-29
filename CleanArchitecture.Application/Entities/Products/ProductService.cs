@@ -10,12 +10,12 @@ namespace CleanArchitecture.Application.Entities.Products;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _repository;
-    private readonly IProductCategoryRepository _productCategoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public ProductService(IProductRepository repository,IProductCategoryRepository productCategoryRepository)
+    public ProductService(IProductRepository repository,ICategoryRepository categoryRepository)
 	{
         _repository = repository;
-        _productCategoryRepository = productCategoryRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<CreateProductResult> CreateProduct(CreateProductViewModel productViewModel, IFormFile productImage)
@@ -50,7 +50,7 @@ public class ProductService : IProductService
     }
 
 
-    public async Task<CreateProductCategoryResult> CreateProductCategory(CreateProductCategoryViewModel productViewModel, IFormFile productCategoryImage)
+    public async Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel productViewModel, IFormFile productCategoryImage)
     {
         //if (await _productRepository.CheckUrlNameCategories(createCategory.UrlName)) return CreateProductCategoryResult.IsExistUrlName;
 
@@ -71,9 +71,55 @@ public class ProductService : IProductService
             productCategory.ImageName = imageName;
         }
 
-        await _productCategoryRepository.AddAsync(productCategory);
-        await _productCategoryRepository.Save();
-        return CreateProductCategoryResult.Success;
+        await _categoryRepository.AddAsync(productCategory);
+        await _categoryRepository.Save();
+        return CreateCategoryResult.Success;
+    }
+
+    public async Task<EditProductResult> EditProduct(EditProductViewModel productViewModel)
+    {
+        var product = await _repository.GetProductById(productViewModel.ProductId);
+        if (product == null) return EditProductResult.NotFound;
+
+
+        product.Name = productViewModel.Name;
+        product.Price = productViewModel.Price;
+        product.ShortDescription = productViewModel.ShortDescription;
+        product.Description = productViewModel.Description;
+        product.IsActive = productViewModel.IsActive;
+        product.ModifiedDate = DateTime.Now;
+        product.ModifiedById = productViewModel.ModifiedBy;
+
+        if (productViewModel.ProductImage != null && productViewModel.ProductImage.IsImage())
+        {
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productViewModel.ProductImage.FileName);
+            productViewModel.ProductImage.AddImageToServer(imageName, PathExtensions.ProductOrginServer, 255, 273, PathExtensions.ProductThumbServer, product.ProductImageName);
+            product.ProductImageName = imageName;
+        }
+
+        _repository.Update(product);
+        await _repository.Save();
+        return EditProductResult.Success;
+
+    }
+
+    public async Task<EditProductViewModel> EditProduct(Guid productId)
+    {
+        var product = await _repository.GetProductById(productId);
+
+        if(product != null)
+        {
+            return new EditProductViewModel
+            {
+                Name = product.Name,
+                Price = product.Price,
+                IsActive = product.IsActive,
+                ProductImageName = product.ProductImageName,
+                ShortDescription = product.ShortDescription,
+                Description = product.Description,
+            };
+        }
+        return null;
     }
 
     public async Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filterProducts)
@@ -84,6 +130,11 @@ public class ProductService : IProductService
     public async Task<List<ProductCategory>> GetAllProductsCategory()
     {
         return await _repository.GetAllProductsCategory();
+    }
+
+    public async Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter)
+    {
+       return await _categoryRepository.FilterCategory(filter); 
     }
 }
 
