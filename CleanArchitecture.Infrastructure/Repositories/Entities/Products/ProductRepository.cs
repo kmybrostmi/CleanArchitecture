@@ -37,7 +37,6 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     public async Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filter)
     {
         var query = Context.Products
-                           .Where(x => x.IsActived && !x.IsDeleted)
                            .Include(x => x.ProductsCategories.Where(x => x.IsActived && !x.IsDeleted))
                            .ThenInclude(x => x.Category)
                            .AsQueryable();
@@ -57,12 +56,13 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         switch (filter.ProductState)
         {
             case ProductState.All:
+                query = query.Where(c => c.IsActived && !c.IsDeleted);
                 break;
             case ProductState.IsActice:
-                query = query.Where(c => c.IsActive);
+                query = query.Where(c => c.IsActive && c.IsActived && !c.IsDeleted);
                 break;
             case ProductState.Delete:
-                query = query.Where(c => c.IsDeleted);
+                query = query.Where(c => c.IsDeleted && !c.IsActived);
                 break;
         }
 
@@ -71,13 +71,13 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
             case ProductOrder.All:
                 break;
             case ProductOrder.ProductNewss:
-                query = query.Where(c => c.IsActive).OrderByDescending(c => c.CreateDate);
+                query = query.Where(c => c.IsActive && c.IsActived && !c.IsDeleted).OrderByDescending(c => c.CreateDate);
                 break;
             case ProductOrder.ProductExp:
-                query = query.Where(c => c.IsActive).OrderByDescending(c => c.Price);
+                query = query.Where(c => c.IsActive && c.IsActived && !c.IsDeleted).OrderByDescending(c => c.Price);
                 break;
             case ProductOrder.ProductInExprnsive:
-                query = query.Where(c => c.IsActive).OrderBy(c => c.Price);
+                query = query.Where(c => c.IsActive && c.IsActived && !c.IsDeleted).OrderBy(c => c.Price);
                 break;
         }
 

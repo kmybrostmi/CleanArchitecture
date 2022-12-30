@@ -10,6 +10,8 @@ public interface IProductService
     Task<EditProductResult> EditProduct(EditProductViewModel productViewModel);
     Task<EditProductViewModel> EditProduct(Guid productId);
     Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filterProducts);
+    Task<DeleteProductResult> DeleteProduct(Guid productId, Guid modifiedBy);
+    Task RestoreProduct(Guid productId, Guid modifiedBy);
 
     //Category
     Task<List<Category>> GetAllCategories();

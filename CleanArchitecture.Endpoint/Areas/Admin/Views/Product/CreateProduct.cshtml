@@ -85,10 +85,13 @@
 
             <div class="card shadow-sm">
                 <div class="card-body">
+                    <p>دسته بندی ها:</p>
+                    <br />
                     @if (categories != null && categories.Any())
                     {
                         @foreach (var category in categories)
                         {
+                            <br />
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="@nameof(Model.ProductCategory)" value="@category.Id" />

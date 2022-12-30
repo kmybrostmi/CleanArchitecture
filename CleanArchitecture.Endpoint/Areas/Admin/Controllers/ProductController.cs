@@ -24,7 +24,7 @@ public class ProductController : AdminBaseController
     [HttpGet]
     public async Task<IActionResult> CreateProduct()
     {
-        TempData["Categories"] = _productService.GetAllCategories();
+        TempData["Categories"] = await _productService.GetAllCategories();
         return View();
     }
 
@@ -53,9 +53,11 @@ public class ProductController : AdminBaseController
     [HttpGet]
     public async Task<IActionResult> EditProduct(Guid productId)
     {
-        TempData["Categories"] = await _productService.GetAllCategories();
-
         var result = await _productService.EditProduct(productId);
+        if (result == null)
+            return NotFound();
+
+        TempData["Categories"] = await _productService.GetAllCategories();
         return View(result);
     }
 
@@ -63,7 +65,6 @@ public class ProductController : AdminBaseController
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> EditProduct(EditProductViewModel productViewModel)
     {
-        //TempData["Categories"] = await _productService.GetAllCategories();
         productViewModel.ModifiedBy = User.GetUserId();
 
         var result = await _productService.EditProduct(productViewModel);
@@ -80,6 +81,7 @@ public class ProductController : AdminBaseController
                 TempData[SuccessMessage] = "ویرایش محصول با موفقیت انجام شد";
                 return RedirectToAction("FilterProduct");
         }
+        TempData["Categories"] = await _productService.GetAllCategories();
         return View(productViewModel);
     }
 
@@ -92,7 +94,7 @@ public class ProductController : AdminBaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> CreateCategory()
+    public IActionResult CreateCategory()
     {
         return View();
     }
@@ -130,16 +132,39 @@ public class ProductController : AdminBaseController
         switch (result)
         {
             case EditProductCategoryResult.IsExistUrlName:
-                TempData[SuccessMessage] = "مسیر انتخاب شده برای دسته بندی از قبل وجود دارد";
+                TempData[WarningMessage] = "مسیر انتخاب شده برای دسته بندی از قبل وجود دارد";
                 break;
             case EditProductCategoryResult.NotFound:
-                TempData[SuccessMessage] = "دسته بندی یافت نشد";
+                TempData[WarningMessage] = "دسته بندی یافت نشد";
                 break;
             case EditProductCategoryResult.Success:
                 TempData[SuccessMessage] = "دسته بندی با موفقیت ثبت شد";
                 return RedirectToAction("FilterCategory");
         }
         return View(editCategoryViewModel);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteProduct(Guid productId)
+    {
+        var result = await _productService.DeleteProduct(productId,User.GetUserId());
+        switch (result)
+        {
+            case DeleteProductResult.NotFound:
+                TempData[WarningMessage] = "محصول یافت نشد";
+                break;
+            case DeleteProductResult.Success:
+                TempData[SuccessMessage] = "محصول با موفقیت حذف شد";
+                return RedirectToAction("FilterProduct");
+        }
+        return RedirectToAction("FilterProduct");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> RestoreProduct(Guid productId)
+    {
+        await _productService.RestoreProduct(productId, User.GetUserId());
+        return RedirectToAction("FilterProduct");
     }
 }
 

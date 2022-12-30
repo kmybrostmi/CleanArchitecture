@@ -118,13 +118,14 @@ public class ProductService : IProductService
         {
             return new EditProductViewModel
             {
+                ProductId = productId,
                 Name = product.Name,
                 Price = product.Price,
                 IsActive = product.IsActive,
                 ProductImageName = product.ProductImageName,
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
-                ProductCategory = product.ProductsCategories.Where(x => x.ProductId == product.Id).Select(x=>x.Id).ToList()
+                ProductCategory = product.ProductsCategories.Where(x => x.ProductId == product.Id && x.IsActived && !x.IsDeleted).Select(x=>x.Id).ToList()
             };
         }
         return null;
@@ -184,6 +185,34 @@ public class ProductService : IProductService
         //_categoryRepository.Update(category);
         await _categoryRepository.Save();
         return EditProductCategoryResult.Success;
+    }
+
+    public async Task<DeleteProductResult> DeleteProduct(Guid productId, Guid modifiedBy)
+    {
+        var product = await _repository.GetTracking(productId);
+        if (product == null) return DeleteProductResult.NotFound;
+
+        product.IsDeleted = true;
+        product.IsActived = false;
+        product.ModifiedDate = DateTime.Now;
+        product.ModifiedById = modifiedBy;
+
+        await _repository.Save();
+        return DeleteProductResult.Success;
+    }
+
+    public async Task RestoreProduct(Guid productId, Guid modifiedBy)
+    {
+        var product = await _repository.GetTracking(productId);
+        if (product == null) return;
+
+        product.IsDeleted = false;
+        product.IsActived = true;
+        product.ModifiedDate = DateTime.Now;
+        product.ModifiedById = modifiedBy;
+
+        await _repository.Save();
+        return;
     }
 }
 
