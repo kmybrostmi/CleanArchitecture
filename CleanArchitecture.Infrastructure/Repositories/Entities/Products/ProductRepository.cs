@@ -1,6 +1,4 @@
-﻿
-
-using CleanArchitecture.Domain.Common.Paging;
+﻿using CleanArchitecture.Domain.Common.Paging;
 using CleanArchitecture.Domain.Entities.Products;
 using CleanArchitecture.Domain.ViewModels.Admin.ProductVm;
 using CleanArchitecture.Infrastructure.EfContext;

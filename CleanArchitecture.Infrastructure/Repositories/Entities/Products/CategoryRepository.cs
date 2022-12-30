@@ -15,6 +15,16 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
     }
 
+    public async Task<bool> ExistsCategoryUrl(string url)
+    {
+        return await Context.Categories.AnyAsync(x=>x.UrlName== url);   
+    }
+
+    public async Task<bool> ExistsCategoryUrl(string url, Guid categoryId)
+    {
+        return await Context.Categories.AnyAsync(x => x.UrlName == url && x.Id != categoryId);
+    }
+
     public async Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter)
     {
         var query = Context.Categories.Where(x => x.IsActived && !x.IsDeleted);

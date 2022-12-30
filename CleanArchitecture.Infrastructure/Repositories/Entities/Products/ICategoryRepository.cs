@@ -8,7 +8,9 @@ namespace CleanArchitecture.Infrastructure.Repositories.Entities.Products;
 
 public interface ICategoryRepository : IBaseRepository<Category>
 {
-    Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter);    
+    Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter);   
+    Task<bool> ExistsCategoryUrl(string url);
+    Task<bool> ExistsCategoryUrl(string url, Guid categoryId);
 }
 
 

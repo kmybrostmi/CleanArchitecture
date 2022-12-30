@@ -113,6 +113,34 @@ public class ProductController : AdminBaseController
         }
         return View(createCategoryView);
     }
+
+
+    [HttpGet]
+    public async Task<IActionResult> EditCategory(Guid categoryId)
+    {
+        var result = await _productService.EditCategory(categoryId);
+        return View(result);
+    }
+
+    [HttpPost , ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditCategory(EditCategoryViewModel editCategoryViewModel)
+    {
+        var result = await _productService.EditCategory(editCategoryViewModel);
+
+        switch (result)
+        {
+            case EditProductCategoryResult.IsExistUrlName:
+                TempData[SuccessMessage] = "مسیر انتخاب شده برای دسته بندی از قبل وجود دارد";
+                break;
+            case EditProductCategoryResult.NotFound:
+                TempData[SuccessMessage] = "دسته بندی یافت نشد";
+                break;
+            case EditProductCategoryResult.Success:
+                TempData[SuccessMessage] = "دسته بندی با موفقیت ثبت شد";
+                return RedirectToAction("FilterCategory");
+        }
+        return View(editCategoryViewModel);
+    }
 }
 
 

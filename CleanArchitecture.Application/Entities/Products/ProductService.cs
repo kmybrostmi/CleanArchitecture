@@ -51,18 +51,19 @@ public class ProductService : IProductService
     }
 
 
-    public async Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel productViewModel, IFormFile productCategoryImage)
+    public async Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel categoryViewModel, IFormFile productCategoryImage)
     {
-        //if (await _productRepository.CheckUrlNameCategories(createCategory.UrlName)) return CreateProductCategoryResult.IsExistUrlName;
+        if (await _categoryRepository.ExistsCategoryUrl(categoryViewModel.UrlName)) return CreateCategoryResult.IsExistUrlName;
 
         var productCategory = new Category
         {
-            Title = productViewModel.Title,
-            CreateById = productViewModel.CreateBy,
+            Title = categoryViewModel.Title,
+            CreateById = categoryViewModel.CreateBy,
             CreateDate = DateTime.Now,
             IsActived = true,
             IsDeleted = false,
-            UrlName = productViewModel.UrlName,
+            UrlName = categoryViewModel.UrlName,
+            ParentId = null
         };
 
         if (productCategoryImage != null && productCategoryImage.IsImage())
@@ -81,7 +82,6 @@ public class ProductService : IProductService
     {
         var product = await _repository.GetProductById(productViewModel.ProductId);
         if (product == null) return EditProductResult.NotFound;
-
 
         product.Name = productViewModel.Name;
         product.Price = productViewModel.Price;
@@ -124,6 +124,7 @@ public class ProductService : IProductService
                 ProductImageName = product.ProductImageName,
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
+                ProductCategory = product.ProductsCategories.Where(x => x.ProductId == product.Id).Select(x=>x.Id).ToList()
             };
         }
         return null;
@@ -142,6 +143,47 @@ public class ProductService : IProductService
     public async Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter)
     {
        return await _categoryRepository.FilterCategory(filter); 
+    }
+
+    public async Task<EditCategoryViewModel> EditCategory(Guid categoryId)
+    {
+        var category = await _categoryRepository.GetTracking(categoryId);
+
+        if(category != null)
+        {
+            return new EditCategoryViewModel
+            {
+                ImageName= category.ImageName,
+                Title= category.Title,  
+                UrlName= category.UrlName,
+            };
+        }
+        return null;
+    }
+
+    public async Task<EditProductCategoryResult> EditCategory(EditCategoryViewModel editCategoryViewModel)
+    {
+        var category = await _categoryRepository.GetTracking(editCategoryViewModel.CategoryId);
+        if (category == null) return EditProductCategoryResult.NotFound;
+
+        if (await _categoryRepository.ExistsCategoryUrl(editCategoryViewModel.UrlName, editCategoryViewModel.CategoryId)) 
+            return EditProductCategoryResult.IsExistUrlName;
+
+        category.ModifiedDate = DateTime.Now;
+        category.ModifiedById = editCategoryViewModel.ModifiedBy;
+        category.Title = editCategoryViewModel.Title;
+        category.UrlName = editCategoryViewModel.UrlName;
+
+        if (editCategoryViewModel.CategoryImage != null && editCategoryViewModel.CategoryImage.IsImage())
+        {
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(editCategoryViewModel.CategoryImage.FileName);
+            editCategoryViewModel.CategoryImage.AddImageToServer(imageName, PathExtensions.ProductOrginServer, 255, 273, PathExtensions.ProductThumbServer, category.ImageName);
+            category.ImageName = imageName;
+        }
+
+        //_categoryRepository.Update(category);
+        await _categoryRepository.Save();
+        return EditProductCategoryResult.Success;
     }
 }
 

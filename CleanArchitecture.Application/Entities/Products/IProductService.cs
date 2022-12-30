@@ -6,18 +6,18 @@ namespace CleanArchitecture.Application.Entities.Products;
 
 public interface IProductService
 {
-    Task<List<Category>> GetAllCategories();
-
     Task<CreateProductResult> CreateProduct(CreateProductViewModel productViewModel, IFormFile productImage);
-    Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel productViewModel, IFormFile productCategoryImage);
-
     Task<EditProductResult> EditProduct(EditProductViewModel productViewModel);
     Task<EditProductViewModel> EditProduct(Guid productId);
     Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filterProducts);
 
-
-
+    //Category
+    Task<List<Category>> GetAllCategories();
+    Task<EditCategoryViewModel> EditCategory(Guid categoryId);
+    Task<EditProductCategoryResult> EditCategory(EditCategoryViewModel editCategoryViewModel);
+    Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel categoryViewModel, IFormFile productCategoryImage);
     Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter);
 }
+
 
 
