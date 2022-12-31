@@ -12,11 +12,13 @@ public class ProductService : IProductService
 {
     private readonly IProductRepository _repository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IProductGalleryRepository _productGalleryRepository;
 
-    public ProductService(IProductRepository repository,ICategoryRepository categoryRepository)
-	{
+    public ProductService(IProductRepository repository, ICategoryRepository categoryRepository,IProductGalleryRepository productGalleryRepository)
+    {
         _repository = repository;
         _categoryRepository = categoryRepository;
+        _productGalleryRepository = productGalleryRepository;
     }
 
     public async Task<CreateProductResult> CreateProduct(CreateProductViewModel productViewModel, IFormFile productImage)
@@ -114,7 +116,7 @@ public class ProductService : IProductService
     {
         var product = await _repository.GetProductById(productId);
 
-        if(product != null)
+        if (product != null)
         {
             return new EditProductViewModel
             {
@@ -125,7 +127,7 @@ public class ProductService : IProductService
                 ProductImageName = product.ProductImageName,
                 ShortDescription = product.ShortDescription,
                 Description = product.Description,
-                ProductCategory = product.ProductsCategories.Where(x => x.ProductId == product.Id && x.IsActived && !x.IsDeleted).Select(x=>x.Id).ToList()
+                ProductCategory = product.ProductsCategories.Where(x => x.ProductId == product.Id && x.IsActived && !x.IsDeleted).Select(x => x.Id).ToList()
             };
         }
         return null;
@@ -133,7 +135,7 @@ public class ProductService : IProductService
 
     public async Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filterProducts)
     {
-        return await _repository.FilterProduct(filterProducts); 
+        return await _repository.FilterProduct(filterProducts);
     }
 
     public async Task<List<Category>> GetAllCategories()
@@ -143,20 +145,20 @@ public class ProductService : IProductService
 
     public async Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter)
     {
-       return await _categoryRepository.FilterCategory(filter); 
+        return await _categoryRepository.FilterCategory(filter);
     }
 
     public async Task<EditCategoryViewModel> EditCategory(Guid categoryId)
     {
         var category = await _categoryRepository.GetTracking(categoryId);
 
-        if(category != null)
+        if (category != null)
         {
             return new EditCategoryViewModel
             {
-                ImageName= category.ImageName,
-                Title= category.Title,  
-                UrlName= category.UrlName,
+                ImageName = category.ImageName,
+                Title = category.Title,
+                UrlName = category.UrlName,
             };
         }
         return null;
@@ -167,7 +169,7 @@ public class ProductService : IProductService
         var category = await _categoryRepository.GetTracking(editCategoryViewModel.CategoryId);
         if (category == null) return EditProductCategoryResult.NotFound;
 
-        if (await _categoryRepository.ExistsCategoryUrl(editCategoryViewModel.UrlName, editCategoryViewModel.CategoryId)) 
+        if (await _categoryRepository.ExistsCategoryUrl(editCategoryViewModel.UrlName, editCategoryViewModel.CategoryId))
             return EditProductCategoryResult.IsExistUrlName;
 
         category.ModifiedDate = DateTime.Now;
@@ -213,6 +215,37 @@ public class ProductService : IProductService
 
         await _repository.Save();
         return;
+    }
+
+    public async Task<bool> AddProductGallery(Guid productId, List<IFormFile> images)
+    {
+        var product = await _repository.GetProductById(productId);
+        if (product == null)
+            return false;
+
+        if (images != null && images.Any())
+        {
+            var productGallery = new List<ProductGalleries>();
+            foreach (var image in images)
+            {
+                if (image.IsImage())
+                {
+                    var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(image.FileName);
+                    image.AddImageToServer(imageName, PathExtensions.ProductOrginServer, 255, 273, PathExtensions.ProductThumbServer);
+
+
+                    productGallery.Add(new ProductGalleries
+                    {
+                        ImageName = imageName,
+                        ProductId = productId
+                    });
+                }
+            }
+
+            await _productGalleryRepository.AddRange(productGallery);
+            await _productGalleryRepository.Save();
+        }
+        return true;
     }
 }
 

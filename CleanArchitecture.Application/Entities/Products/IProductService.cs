@@ -12,6 +12,7 @@ public interface IProductService
     Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filterProducts);
     Task<DeleteProductResult> DeleteProduct(Guid productId, Guid modifiedBy);
     Task RestoreProduct(Guid productId, Guid modifiedBy);
+    Task<bool> AddProductGallery(Guid productId, List<IFormFile> images);
 
     //Category
     Task<List<Category>> GetAllCategories();

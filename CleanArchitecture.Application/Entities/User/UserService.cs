@@ -62,6 +62,11 @@ public class UserService : IUserService
         return ChangePasswordResult.NotMatched;
     }
 
+    public bool CheckPermission(Guid permissionId, string phoneNumber)
+    {
+        return _repository.CheckPermission(permissionId, phoneNumber);
+    }
+
     public async Task<CreateUserForAdminResult> CreateUserForAdmin(CreateUserForAdminViewModel viewModel)
     {
         var user = await _repository.GetUserByPhoneNumber(viewModel.PhoneNumber);

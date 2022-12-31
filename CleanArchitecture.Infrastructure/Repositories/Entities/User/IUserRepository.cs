@@ -11,6 +11,7 @@ public interface IUserRepository : IBaseRepository<Users>
     void UpdateUser(Users user);
     Task<Users> GetUserById(Guid id);
     Task<Users> GetUserAndRolesById(Guid id);
+    bool CheckPermission(Guid permissionId, string phoneNumber);
 
     //Admin
     Task<FilterUserViewModel> FilterUser(FilterUserViewModel filterUser);

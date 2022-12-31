@@ -65,6 +65,22 @@ public class UserRepository : BaseRepository<Users>, IUserRepository
 
         return query;
     }
+
+    public bool CheckPermission(Guid permissionId, string phoneNumber)
+    {
+        Guid userId = Context.Users.AsQueryable().Single(c => c.PhoneNumber == phoneNumber).Id;
+
+        var userRole = Context.UserRoles.AsQueryable()
+            .Where(c => c.UserId == userId).Select(r => r.RoleId).ToList();
+
+        if (!userRole.Any())
+            return false;
+
+        var permissions = Context.RolePermissions.AsQueryable()
+            .Where(c => c.PermissionId == permissionId).Select(c => c.RoleId).ToList();
+
+        return permissions.Any(c => userRole.Contains(c));
+    }
 }
 
 

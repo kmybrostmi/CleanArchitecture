@@ -166,6 +166,13 @@ public class ProductController : AdminBaseController
         await _productService.RestoreProduct(productId, User.GetUserId());
         return RedirectToAction("FilterProduct");
     }
+
+    [HttpGet]
+    public IActionResult GalleryProduct(Guid productId)
+    {
+        ViewBag.productId = productId;
+        return View();
+    }
 }
 
 
