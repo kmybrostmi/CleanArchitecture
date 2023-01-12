@@ -247,5 +247,10 @@ public class ProductService : IProductService
         }
         return true;
     }
+
+    public async Task<List<ProductGalleries>> GetAllProductGalleries(Guid productId)
+    {
+        return await _productGalleryRepository.GetAllProductGalleries(productId);
+    }
 }
 

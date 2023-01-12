@@ -173,7 +173,30 @@ public class ProductController : AdminBaseController
         ViewBag.productId = productId;
         return View();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> AddImagesToProduct(Guid productId, List<IFormFile> images)
+    {
+        var result = await _productService.AddProductGallery(productId, images);
+        if(result)
+        {
+            JsonResponseStatus.Success();
+        }
+        JsonResponseStatus.Error();
+
+        return RedirectToAction("FilterProduct");
+    }
+
+    public async Task<IActionResult> GetAllProductGalleries(Guid productId)
+    {
+        var result = await _productService.GetAllProductGalleries(productId);
+        return View(result);
+    }
 }
+
+
+
+
 
 
 

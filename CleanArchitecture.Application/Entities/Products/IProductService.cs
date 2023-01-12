@@ -12,7 +12,6 @@ public interface IProductService
     Task<FilterProductsViewModel> FilterProduct(FilterProductsViewModel filterProducts);
     Task<DeleteProductResult> DeleteProduct(Guid productId, Guid modifiedBy);
     Task RestoreProduct(Guid productId, Guid modifiedBy);
-    Task<bool> AddProductGallery(Guid productId, List<IFormFile> images);
 
     //Category
     Task<List<Category>> GetAllCategories();
@@ -20,6 +19,11 @@ public interface IProductService
     Task<EditProductCategoryResult> EditCategory(EditCategoryViewModel editCategoryViewModel);
     Task<CreateCategoryResult> CreateCategory(CreateCategoryViewModel categoryViewModel, IFormFile productCategoryImage);
     Task<FilterCategoryViewModel> FilterCategory(FilterCategoryViewModel filter);
+
+
+    //Gallery
+    Task<bool> AddProductGallery(Guid productId, List<IFormFile> images);
+    Task<List<ProductGalleries>> GetAllProductGalleries(Guid productId);
 }
 
 

@@ -73,7 +73,8 @@
                                     </td>
                                     <td>
                                         <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@product.Id">ویرایش</a>
-                                        <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Product" asp-action="GalleryProduct" asp-route-productId="@product.Id">گالری تصاویر</a>
+                                        <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Product" asp-action="GalleryProduct" asp-route-productId="@product.Id">افزودن تصویر به گالری</a>
+                                        <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Product" asp-action="GetAllProductGalleries" asp-route-productId="@product.Id">مشاهده گالری تصاویر</a>
                                         @if (product.IsDeleted)
                                         {
                                             <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Product" asp-action="RestoreProduct" asp-route-productId="@product.Id">بازگردانی</a>

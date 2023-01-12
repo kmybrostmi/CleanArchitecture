@@ -7,7 +7,7 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <p class="card-text">ثبت اطلاعات</p>
-                <div id="shopDropZone" class="dropzone" dropzone-url="@Url.Action("AddImageToProduct","Product",new {productId =productId})">
+                <div id="shopDropZone" class="dropzone" dropzone-url="@Url.Action("AddImagesToProduct ","Product",new {productId =productId})">
                 </div>
 
             </div>
@@ -38,7 +38,7 @@
            console.log(response);
            if(response.status =="Success"){
                 ShowMessage('پیغام موفقیت','تصویر مورد نظر با موفقیت ثبت شد','success');
-                        window.location.replace('https://localhost:7265/admin/Product/FilterProducts');
+                        window.location.replace('https://localhost:44360/admin/Product/FilterProduct');
 
            }
         })
@@ -46,4 +46,5 @@
     }
 </script>
 }
+
 

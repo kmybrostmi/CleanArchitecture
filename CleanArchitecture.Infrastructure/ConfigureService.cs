@@ -18,6 +18,7 @@ public static class ConfigureService
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IUserWalletRepository, UserWalletRepository>();
         services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IProductGalleryRepository, ProductGalleryRepository>();
         services.AddTransient<ICategoryRepository, CategoryRepository>();
         services.AddTransient<IRoleRepository, RoleRepository>();
 
